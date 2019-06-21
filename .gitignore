@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/ruby,rails,macos,windows
-# Edit at https://www.gitignore.io/?templates=ruby,rails,macos,windows
+# Created by https://www.gitignore.io/api/ruby,rails,macos,windows,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=ruby,rails,macos,windows,visualstudiocode
 
 ### macOS ###
 # General
@@ -146,6 +146,17 @@ build-iPhoneSimulator/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -171,4 +182,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/ruby,rails,macos,windows
+# End of https://www.gitignore.io/api/ruby,rails,macos,windows,visualstudiocode
