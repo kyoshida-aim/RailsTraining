@@ -1,2 +1,4 @@
 # RailsTraining
-Ruby on Rails研修のPR作成・進捗管理用
+
+[DB設計](https://github.com/kyoshida-aim/RailsTraining/issues/1)
+[UIイメージ](https://github.com/kyoshida-aim/RailsTraining/issues/2)
