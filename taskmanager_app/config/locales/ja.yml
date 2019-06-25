@@ -155,7 +155,12 @@ ja:
       submit: 保存する
       update: 更新する
     list: 一覧
-    edit: 編集
+    create:
+      button: 新規登録
+      notice: "タスク「%{name}」を登録しました"
+    edit:
+      button: 編集
+      notice: "タスク「%{name}」を更新しました"
   number:
     currency:
       format:

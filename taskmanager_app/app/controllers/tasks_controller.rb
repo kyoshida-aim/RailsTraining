@@ -18,13 +18,13 @@ class TasksController < ApplicationController
   def update
     task = Task.find(params[:id])
     task.update(task_params)
-    redirect_to(task_url, notice: "タスク「#{task.name}」を更新しました")
+    redirect_to(task_url, notice: t('helpers.edit.notice', name: task.name))
   end
 
   def create
     task = Task.new(task_params)
     task.save!
-    redirect_to(tasks_url, notice: "タスク「#{task.name}」を登録しました")
+    redirect_to(tasks_url, notice: t('helpers.create.notice', name: task.name))
   end
 
   private
