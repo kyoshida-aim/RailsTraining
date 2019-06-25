@@ -155,6 +155,7 @@ ja:
       submit: 保存する
       update: 更新する
     list: 一覧
+    edit: 編集
   number:
     currency:
       format:
