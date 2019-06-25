@@ -1,7 +1,7 @@
 %h1 Tasks#new
 
 .nav.justify-content-end
-  = link_to(I18n.t('activerecord.terms.list'), tasks_path, class: 'nav=link')
+  = link_to(t('activerecord.terms.list'), tasks_path, class: 'nav=link')
 
 = form_with model: @task, local: true do |f|
   .form-group
