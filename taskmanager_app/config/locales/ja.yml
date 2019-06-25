@@ -7,8 +7,6 @@ ja:
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
-    terms:
-      list: 一覧
     models:
       task: タスク
     attributes:
@@ -156,6 +154,7 @@ ja:
       create: 登録する
       submit: 保存する
       update: 更新する
+    list: 一覧
   number:
     currency:
       format:
