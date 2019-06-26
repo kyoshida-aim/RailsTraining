@@ -164,6 +164,7 @@ ja:
     delete:
       button: 削除
       confirm: "タスク「%{name}」を削除します。よろしいですか？"
+      notice: "タスク「%{name}」を削除しました"
   number:
     currency:
       format:
