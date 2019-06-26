@@ -22,3 +22,5 @@
       %td= @task.updated_at
 
 = link_to(t('helpers.edit.button'), edit_task_path, class: 'btn btn-primary mr-3')
+= link_to(t('helpers.delete.button'), @task, method: :delete,
+  data: { confirm: t('helpers.delete.confirm', name: @task.name) } ,class: 'btn btn-danger')
