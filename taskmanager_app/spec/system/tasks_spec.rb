@@ -53,6 +53,22 @@ describe 'タスク管理機能', type: :system do
     end
   end
 
+  describe '更新機能' do
+    attr_description = Task.human_attribute_name(:description)
+
+    before do
+      visit(task_path(task_a))
+      click_on(I18n.t('helpers.edit.button'))
+      fill_in(attr_description, with: '適当な説明文')
+      click_button(I18n.t('helpers.submit.update'))
+    end
+
+    it '正常に更新できる' do
+      expect(page).to have_selector('.alert-success', text: task_a.name)
+      expect(page).to have_content('適当な説明文')
+    end
+  end
+
   describe '削除機能' do
     it '削除できる' do
       visit(task_path(task_a))
