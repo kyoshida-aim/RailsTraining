@@ -1,19 +1,27 @@
 require 'rails_helper'
 
 describe 'タスク管理機能', type: :system do
-  let!(:task_a) { FactoryBot.create(:task, name: '最初のタスク') }
+  task_a = FactoryBot.create(:task, name: '最初のタスク', description: '検証用のタスク')
+
+  shared_examples_for '最初のタスクの名称が表示される' do
+    it { expect(page).to have_content('最初のタスク') }
+  end
 
   describe '一覧表示機能' do
-    it '一覧表示のページで最初のタスクが表示される' do
+    before do
       visit(tasks_path)
-      expect(page).to have_content('最初のタスク')
     end
+    it_behaves_like '最初のタスクの名称が表示される'
   end
 
   describe '詳細表示機能' do
-    it '最初のタスクの詳細が表示される' do
-      visit(tasks_path(task_a))
-      expect(page).to have_content('最初のタスク')
+    before do
+      visit(task_path(task_a))
+    end
+    it_behaves_like '最初のタスクの名称が表示される'
+
+    it '最初のタスクの説明文が表示される' do
+      expect(page).to have_content('検証用のタスク')
     end
   end
 
