@@ -28,9 +28,12 @@ class TasksController < ApplicationController
   end
 
   def create
-    task = Task.new(task_params)
-    task.save!
-    redirect_to(tasks_url, notice: t('helpers.create.notice', name: task.name))
+    @task = Task.new(task_params)
+    if @task.save
+      redirect_to(@task, notice: t('helpers.create.notice', name: @task.name))
+    else
+      render :new
+    end
   end
 
   private
