@@ -52,4 +52,14 @@ describe 'タスク管理機能', type: :system do
       end
     end
   end
+
+  describe '削除機能' do
+    it '削除できる' do
+      visit(task_path(task_a))
+      click_on(I18n.t('helpers.delete.button'))
+      page.driver.browser.switch_to.alert.accept
+
+      expect(page).to have_selector('.alert-success', text: '最初のタスク')
+    end
+  end
 end
