@@ -1,13 +1,20 @@
 %h1 Tasks#index
 
+= link_to(t('helpers.create.button'), new_task_path, class: 'btn btn-primary')
+
 .mb-3
 %table.table.table-hover
   %thead.thead-default
     %tr
       %th= Task.human_attribute_name(:name)
       %th= Task.human_attribute_name(:created_at)
+      %th
     %tbody
       - @tasks.each do |task|
         %tr
           %td= link_to task.name, task
           %td= task.created_at
+          %td
+            = link_to(t('helpers.edit.button'), edit_task_path(task), class: 'btn btn-primary mr-3')
+            = link_to(t('helpers.delete.button'), task, method: :delete,
+              data: { confirm: t('helpers.delete.confirm', name: task.name) } ,class: 'btn btn-danger')

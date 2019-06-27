@@ -11,4 +11,6 @@
     .app-title.navbar.navbar-expand-md.navbar-light.bg-light
       .navbar-brand TaskmanagerApp
     .container
+      - if flash.notice.present?
+        .alert.alert-success= flash.notice
       = yield

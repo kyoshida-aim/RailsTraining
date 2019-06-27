@@ -1,7 +1,8 @@
 %h1 Tasks#show
 
 .nav.justify-content-end
-  = link_to('一覧', tasks_path, class: 'nav-link')
+  = link_to(t('helpers.list'), tasks_path, class: 'nav-link')
+
 %table.table.table-hover
   %tbody
     %tr
@@ -19,3 +20,7 @@
     %tr
       %th= Task.human_attribute_name(:updated_at)
       %td= @task.updated_at
+
+= link_to(t('helpers.edit.button'), edit_task_path, class: 'btn btn-primary mr-3')
+= link_to(t('helpers.delete.button'), @task, method: :delete,
+  data: { confirm: t('helpers.delete.confirm', name: @task.name) } ,class: 'btn btn-danger')
