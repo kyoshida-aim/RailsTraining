@@ -25,11 +25,11 @@ describe 'タスク管理機能', type: :system do
   end
 
   describe '新規登録機能' do
-    attribute_name = Task.human_attribute_name(:name)
+    let!(:attr_name) { Task.human_attribute_name(:name) }
 
     before do
       visit(new_task_path)
-      fill_in(attribute_name, with: task_name)
+      fill_in(attr_name, with: task_name)
       click_button(I18n.t('helpers.submit.create'))
     end
 
@@ -46,7 +46,7 @@ describe 'タスク管理機能', type: :system do
 
       it 'エラーになる' do
         within('#error_explanation') do
-          expect(page).to have_content("#{attribute_name}を入力してください")
+          expect(page).to have_content("#{attr_name}を入力してください")
         end
       end
     end
