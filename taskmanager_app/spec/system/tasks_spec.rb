@@ -57,15 +57,32 @@ describe 'タスク管理機能', type: :system do
   describe '更新機能' do
     let!(:attr_description) { Task.human_attribute_name(:description) }
 
-    before do
-      visit(edit_task_path(task_a))
-      fill_in(attr_description, with: '適当な説明文')
-      click_button(I18n.t('helpers.submit.update'))
+    context '一覧画面からタスクの編集画面に移動した時' do
+      before do
+        visit(tasks_path)
+        click_link(href: edit_task_path(task_a))
+        fill_in(attr_description, with: '適当な説明文')
+        click_button(I18n.t('helpers.submit.update'))
+      end
+
+      it '正常に更新できる' do
+        expect(page).to have_selector('.alert-success', text: task_a.name)
+        expect(page).to have_content('適当な説明文')
+      end
     end
 
-    it '正常に更新できる' do
-      expect(page).to have_selector('.alert-success', text: task_a.name)
-      expect(page).to have_content('適当な説明文')
+    context '詳細画面からタスクの編集画面に移動した時' do
+      before do
+        visit(task_path(task_a))
+        click_on(I18n.t('helpers.edit.button'))
+        fill_in(attr_description, with: 'さらに適当な説明文')
+        click_button(I18n.t('helpers.submit.update'))
+      end
+
+      it '正常に更新できる' do
+        expect(page).to have_selector('.alert-success', text: task_a.name)
+        expect(page).to have_content('さらに適当な説明文')
+      end
     end
   end
 
