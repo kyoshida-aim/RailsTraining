@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe 'タスク管理機能', type: :system do
-  task_a = FactoryBot.create(:task, name: '最初のタスク', description: '検証用のタスク')
+  let!(:task_a) do
+    FactoryBot.create(:task, name: '最初のタスク', description: '検証用のタスク')
+  end
 
   describe '一覧表示機能' do
     it '最初のタスクの名称が表示される' do
@@ -53,7 +55,7 @@ describe 'タスク管理機能', type: :system do
   end
 
   describe '更新機能' do
-    attr_description = Task.human_attribute_name(:description)
+    let!(:attr_description) { Task.human_attribute_name(:description) }
 
     before do
       visit(edit_task_path(task_a))
