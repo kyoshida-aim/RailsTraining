@@ -56,8 +56,7 @@ describe 'タスク管理機能', type: :system do
     attr_description = Task.human_attribute_name(:description)
 
     before do
-      visit(task_path(task_a))
-      click_on(I18n.t('helpers.edit.button'))
+      visit(edit_task_path(task_a))
       fill_in(attr_description, with: '適当な説明文')
       click_button(I18n.t('helpers.submit.update'))
     end
