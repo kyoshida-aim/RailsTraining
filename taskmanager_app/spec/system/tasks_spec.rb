@@ -6,23 +6,27 @@ describe 'タスク管理機能', type: :system do
   end
 
   describe '一覧表示機能' do
-    it '最初のタスクの名称が表示される' do
-      visit(tasks_path)
-      expect(page).to have_content('最初のタスク')
+    context '一覧画面に' do
+      it '最初のタスクの名称が表示される' do
+        visit(tasks_path)
+        expect(page).to have_content('最初のタスク')
+      end
     end
   end
 
   describe '詳細表示機能' do
-    before do
-      visit(task_path(task_a))
-    end
+    context 'タスクの詳細画面を開いた時に' do
+      before do
+        visit(task_path(task_a))
+      end
 
-    it '最初のタスクの名称が表示される' do
-      expect(page).to have_content('最初のタスク')
-    end
+      it '最初のタスクの名称が表示される' do
+        expect(page).to have_content('最初のタスク')
+      end
 
-    it '最初のタスクの説明文が表示される' do
-      expect(page).to have_content('検証用のタスク')
+      it '最初のタスクの説明文が表示される' do
+        expect(page).to have_content('検証用のタスク')
+      end
     end
   end
 
@@ -87,12 +91,14 @@ describe 'タスク管理機能', type: :system do
   end
 
   describe '削除機能' do
-    it '削除できる' do
-      visit(task_path(task_a))
-      click_on(I18n.t('helpers.delete.button'))
-      page.driver.browser.switch_to.alert.accept
+    context '削除ボタンを押した時' do
+      it '削除できる' do
+        visit(task_path(task_a))
+        click_on(I18n.t('helpers.delete.button'))
+        page.driver.browser.switch_to.alert.accept
 
-      expect(page).to have_selector('.alert-success', text: '最初のタスク')
+        expect(page).to have_selector('.alert-success', text: '最初のタスク')
+      end
     end
   end
 end
