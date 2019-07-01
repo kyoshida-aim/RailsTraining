@@ -50,15 +50,23 @@ jobs:
       # run tests!
       # Change to rspec if you are using rspec
       - run:
-          name: run tests
+          name: run rspec
           command: |
-            bundle exec rspec \
+            bundle exec rspec --tag ~rubocop \
             --format progress --format RspecJunitFormatter -o tmp/test-results/rspec.xml
+          working_directory: taskmanager_app
+
+      # run rubocop!
+      - run:
+          name: run rubocop
+          command: |
+            bundle exec rspec spec/lint/ \
+            --format progress --format RspecJunitFormatter -o tmp/test-results/rubocop.xml
           working_directory: taskmanager_app
 
       # collect reports
       - store_test_results:
-          path: taskmanager_app/tmp/test-results
+          path: taskmanager_app/tmp/test-results/
       - store_artifacts:
-          path: taskmanager_app/tmp/test-results
+          path: taskmanager_app/tmp/test-results/
           destination: test-results
