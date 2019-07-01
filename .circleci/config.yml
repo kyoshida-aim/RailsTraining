@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  rspec:
     docker:
       # specify the version you desire here
       - image: circleci/ruby:2.6.3-node-browsers
@@ -56,6 +56,43 @@ jobs:
             --format progress --format RspecJunitFormatter -o tmp/test-results/rspec.xml
           working_directory: taskmanager_app
 
+      # collect reports
+      - store_test_results:
+          path: taskmanager_app/tmp/test-results/
+      - store_artifacts:
+          path: taskmanager_app/tmp/test-results/
+          destination: test-results
+
+  rubocop:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.6.3-node-browsers
+        environment:
+          PGHOST: localhost
+          PGUSER: myapp
+          RAILS_ENV: test
+
+    working_directory: ~/repo/taskmanager_app
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1.2-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1.2-dependencies-
+
+      - run:
+          name: install dependencies
+          command:  bundle install --jobs=4 --retry=3 --path vendor/bundle
+          working_directory: taskmanager_app
+      - save_cache:
+          paths:
+            - taskmanager_app/vendor/bundle
+          key: v1.2-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+
       # run rubocop!
       - run:
           name: run rubocop
@@ -70,3 +107,10 @@ jobs:
       - store_artifacts:
           path: taskmanager_app/tmp/test-results/
           destination: test-results
+
+workflows:
+  version: 2
+  rspec_and_rubocop:
+    jobs:
+      - rspec
+      - rubocop
