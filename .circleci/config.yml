@@ -26,9 +26,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1.2-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          - v1.3-dependencies-rspec-{{ checksum "taskmanager_app/Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1.2-dependencies-
+          - v1.3-dependencies-rspec-
 
       - run:
           name: install dependencies
@@ -37,7 +37,7 @@ jobs:
       - save_cache:
           paths:
             - taskmanager_app/vendor/bundle
-          key: v1.2-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          key: v1.3-dependencies-rspec-{{ checksum "taskmanager_app/Gemfile.lock" }}
 
       # Database setup
       - run:
@@ -80,9 +80,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1.2-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          - v1.3-dependencies-rubocop-{{ checksum "taskmanager_app/Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1.2-dependencies-
+          - v1.3-dependencies-rubocop-
 
       - run:
           name: install dependencies
@@ -91,7 +91,7 @@ jobs:
       - save_cache:
           paths:
             - taskmanager_app/vendor/bundle
-          key: v1.2-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          key: v1.3-dependencies-rubocop-{{ checksum "taskmanager_app/Gemfile.lock" }}
 
       # run rubocop!
       - run:
