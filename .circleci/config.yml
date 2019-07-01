@@ -1,15 +1,64 @@
-# Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
-version: 2.1
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.6.3-node-browsers
+        environment:
+          PGHOST: localhost
+          PGUSER: myapp
+          RAILS_ENV: test
+      - image: postgres:9.6
+        environment:
+          POSTGRES_USER: myapp
+          POSTGRES_DB: myapp_test
+          POSTGRES_PASSWORD: ""
 
-# Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.3.1
+    working_directory: ~/repo/taskmanager_app
 
-# Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
-workflows:
-  # Name the workflow "Welcome"
-  Welcome:
-    # Run the welcome/run job in its own container
-    jobs:
-      - welcome/run
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command:  bundle install --jobs=4 --retry=3 --path vendor/bundle
+          working_directory: taskmanager_app
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "taskmanager_app/Gemfile.lock" }}
+
+      # Database setup
+      - run:
+          name: create Database
+          command: |
+            bundle exec rake db:create
+            bundle exec rake db:schema:load
+          working_directory: taskmanager_app
+
+      # run tests!
+      # Change to rspec if you are using rspec
+      - run:
+          name: run tests
+          command: |
+            bundle exec rspec spec/system/ \
+            --format progress --format RspecJunitFormatter -o tmp/test-results/rspec.xml
+          working_directory: taskmanager_app
+
+      # collect reports
+      - store_test_results:
+          path: taskmanager_app/tmp/test-results
+      - store_artifacts:
+          path: taskmanager_app/tmp/test-results
+          destination: test-results
