@@ -1,5 +1,7 @@
 # README
 
+[![CircleCI](https://circleci.com/gh/kyoshida-aim/RailsTraining.svg?style=svg)](https://circleci.com/gh/kyoshida-aim/RailsTraining)
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
