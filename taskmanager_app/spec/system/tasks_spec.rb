@@ -14,6 +14,23 @@ describe "タスク管理機能", type: :system do
     end
   end
 
+  describe "一覧表示機能" do
+    describe "並び順" do
+      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", created_at: Time.zone.now) }
+      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", created_at: 1.day.ago) }
+      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", created_at: 1.day.from_now) }
+
+      it "作成日順に並んでいる" do
+        visit(tasks_path)
+        # "task-name-{タスクのID}"であるidタグが付いている項目を取得
+        tasks = all(id: /\Atask-name-(\d+)\z/)
+        expect(tasks[0]).to have_content(task_c.name)
+        expect(tasks[1]).to have_content(task_a.name)
+        expect(tasks[2]).to have_content(task_b.name)
+      end
+    end
+  end
+
   describe "詳細表示機能" do
     context "タスクの詳細画面を開いた時に" do
       before do
