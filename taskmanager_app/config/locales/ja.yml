@@ -16,6 +16,7 @@ ja:
         description: 詳しい説明
         created_at: 作成日時
         updated_at: 更新日時
+        deadline: 終了期限
   date:
     abbr_day_names:
     - 日

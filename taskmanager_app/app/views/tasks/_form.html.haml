@@ -10,4 +10,8 @@
   .form-group
     = f.label :description
     = f.text_area :description, rows: 5, class: 'form-control', id: 'task_description'
+  .form-group
+    = f.label :deadline
+    - min_value = (task.created_at || Time.zone.now).strftime(t('date.formats.default'))
+    = f.datetime_field :deadline, min: min_value, id: 'task_deadline', class: 'form-control'
   = f.submit nil, class: 'btn btn-primary'
