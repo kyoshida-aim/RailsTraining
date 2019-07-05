@@ -8,6 +8,9 @@ URL : https://ky-railstraining-2019.herokuapp.com/
 [DB設計](https://github.com/kyoshida-aim/RailsTraining/issues/1)  
 [UIイメージ](https://github.com/kyoshida-aim/RailsTraining/issues/2)  
 
+## 自動ビルド
+[![CircleCI](https://circleci.com/gh/kyoshida-aim/RailsTraining.svg?style=svg)](https://circleci.com/gh/kyoshida-aim/RailsTraining)
+
 ## 研修内容(複製)
 Railsの新人研修  
 https://github.com/kyoshida-aim/RailsTraining/blob/master/todo/el-training.md
