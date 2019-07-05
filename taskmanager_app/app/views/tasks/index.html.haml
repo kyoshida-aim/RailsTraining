@@ -8,12 +8,14 @@
     %tr
       %th= Task.human_attribute_name(:name)
       %th= Task.human_attribute_name(:created_at)
+      %th= Task.human_attribute_name(:deadline)
       %th
     %tbody
       - @tasks.each do |task|
         %tr
           %td= link_to(task.name, task, id: "task-name-#{task.id}")
           %td= task.created_at
+          %td= task.deadline
           %td
             = link_to(t('helpers.edit.button'), edit_task_path(task), class: 'btn btn-primary mr-3')
             = link_to(t('helpers.delete.button'), task, method: :delete,
