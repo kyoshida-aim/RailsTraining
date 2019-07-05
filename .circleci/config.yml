@@ -26,9 +26,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1.3-dependencies-rspec-{{ checksum "Gemfile.lock" }}
+          - v1.4-dependencies-rspec-{{ checksum "Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1.3-dependencies-rspec-
+          - v1.4-dependencies-rspec-
 
       - run:
           name: install dependencies
@@ -36,7 +36,7 @@ jobs:
       - save_cache:
           paths:
             - vendor/bundle
-          key: v1.3-dependencies-rspec-{{ checksum "Gemfile.lock" }}
+          key: v1.4-dependencies-rspec-{{ checksum "Gemfile.lock" }}
 
       # Database setup
       - run:
@@ -77,9 +77,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1.3-dependencies-rubocop-{{ checksum "Gemfile.lock" }}
+          - v1.4-dependencies-rubocop-{{ checksum "Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1.3-dependencies-rubocop-
+          - v1.4-dependencies-rubocop-
 
       - run:
           name: install dependencies
@@ -87,7 +87,7 @@ jobs:
       - save_cache:
           paths:
             - vendor/bundle
-          key: v1.3-dependencies-rubocop-{{ checksum "Gemfile.lock" }}
+          key: v1.4-dependencies-rubocop-{{ checksum "Gemfile.lock" }}
 
       # run rubocop!
       - run:
