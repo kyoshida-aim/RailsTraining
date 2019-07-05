@@ -8,7 +8,7 @@
     %tr
       %th= Task.human_attribute_name(:name)
       %th= Task.human_attribute_name(:created_at)
-      %th= Task.human_attribute_name(:deadline)
+      %th= sort_link(@q, :deadline, default_order: :asc)
       %th
     %tbody
       - @tasks.each do |task|

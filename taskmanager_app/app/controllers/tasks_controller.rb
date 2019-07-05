@@ -1,6 +1,8 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all.order(created_at: :desc)
+    # ransackにより受け渡されるパラメータ:qによってソート
+    @q = Task.all.order(created_at: :desc).ransack(params[:q])
+    @tasks = @q.result
   end
 
   def show
