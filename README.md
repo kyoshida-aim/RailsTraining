@@ -42,5 +42,6 @@ remoteにHerokuのremoteが追加される(はず)
 ## 手順3: アプリをデプロイ・更新する
 1. `$ heroku run rake db:migrate`でHeroku側にデータベースを作成する  
 2. `$ git push heroku master`で`master`ブランチの内容をherokuにプッシュするとデプロイできる  
-3. `$ heroku open`でアプリを開き正常に動作しているか確認する。  
+3. (アプリケーションを更新した場合) `heroku restart` でアプリを再起動する
+4. `$ heroku open`でアプリを開き正常に動作しているか確認する。  
 > エラーが発生した場合はまず`1` のデータベースの更新を行ったかどうかを確認する
