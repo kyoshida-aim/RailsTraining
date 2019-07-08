@@ -150,33 +150,74 @@ describe "タスク管理機能", type: :system do
   end
 
   describe "更新機能" do
-    let!(:attr_description) { Task.human_attribute_name(:description) }
+    describe "二通りのタスク編集方法" do
+      let!(:attr_description) { Task.human_attribute_name(:description) }
 
-    context "一覧画面からタスクの編集画面に移動した時" do
-      before do
-        visit(tasks_path)
-        click_link(href: edit_task_path(task_a))
-        fill_in(attr_description, with: "適当な説明文")
-        click_button(I18n.t("helpers.submit.update"))
+      context "一覧画面からタスクの編集画面に移動した時" do
+        before do
+          visit(tasks_path)
+          click_link(href: edit_task_path(task_a))
+          fill_in(attr_description, with: "適当な説明文")
+          click_button(I18n.t("helpers.submit.update"))
+        end
+
+        it "正常に更新できる" do
+          expect(page).to have_selector(".alert-success", text: task_a.name)
+          expect(page).to have_content("適当な説明文")
+        end
       end
 
-      it "正常に更新できる" do
-        expect(page).to have_selector(".alert-success", text: task_a.name)
-        expect(page).to have_content("適当な説明文")
+      context "詳細画面からタスクの編集画面に移動した時" do
+        before do
+          visit(task_path(task_a))
+          click_on(I18n.t("helpers.edit.button"))
+          fill_in(attr_description, with: "さらに適当な説明文")
+          click_button(I18n.t("helpers.submit.update"))
+        end
+
+        it "正常に更新できる" do
+          expect(page).to have_selector(".alert-success", text: task_a.name)
+          expect(page).to have_content("さらに適当な説明文")
+        end
       end
     end
 
-    context "詳細画面からタスクの編集画面に移動した時" do
+    describe "終了期限のバリデーション" do
+      let!(:attr_deadline) { Task.human_attribute_name(:deadline) }
+
       before do
-        visit(task_path(task_a))
-        click_on(I18n.t("helpers.edit.button"))
-        fill_in(attr_description, with: "さらに適当な説明文")
+        visit(edit_task_path(task_a))
+        fill_in(attr_deadline, with: task_deadline)
         click_button(I18n.t("helpers.submit.update"))
       end
 
-      it "正常に更新できる" do
-        expect(page).to have_selector(".alert-success", text: task_a.name)
-        expect(page).to have_content("さらに適当な説明文")
+      context "適切な終了期限を設定した場合" do
+        let(:task_deadline) { 1.day.from_now }
+
+        it "新規登録できる" do
+          expect(page).to have_selector(".alert-success", text: task_a.name)
+        end
+      end
+
+      context "適切でない終了期限を設定した場合" do
+        # 何故か年の入力(西暦)は6桁まで受け付けるので、2桁足さないと月の数字が年に紛れ込む。
+        # 入力フォーム側で制限をかけるか迷ったが、fill_in自体の仕様な気がするので気がするので先頭に2桁足すことで誤魔化す。
+        # オプションで入力内容を調整できる可能性があるので、今後変更する可能性あり。
+        let(:task_deadline) { Time.zone.now.strftime("00%Y %m %d 00 00") }
+
+        it "新規登録できない" do
+          within("#error_explanation") do
+            expect(page).to have_content(I18n.t("activerecord.errors.messages.deadline.greater_than"))
+          end
+        end
+      end
+
+      context "終了期限を設定しなかった場合" do
+        let(:task_deadline) { nil }
+
+        it "新規登録できる" do
+          expect(page).to have_selector(".alert-success", text: task_a.name)
+        end
       end
     end
   end
