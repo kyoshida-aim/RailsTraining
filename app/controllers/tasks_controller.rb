@@ -18,9 +18,12 @@ class TasksController < ApplicationController
   end
 
   def update
-    task = Task.find(params[:id])
-    task.update!(task_params)
-    redirect_to(task_url, notice: t("helpers.edit.notice", name: task.name))
+    @task = Task.find(params[:id])
+    if @task.update(task_params)
+      redirect_to(task_url, notice: t("helpers.edit.notice", name: @task.name))
+    else
+      render :edit
+    end
   end
 
   def destroy
