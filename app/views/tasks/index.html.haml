@@ -9,6 +9,7 @@
       %th= Task.human_attribute_name(:name)
       %th= Task.human_attribute_name(:created_at)
       %th= sort_link(@q, :deadline, default_order: :asc)
+      %th= Task.human_attribute_name(:status)
       %th
     %tbody
       - @tasks.each do |task|
@@ -16,6 +17,7 @@
           %td= link_to(task.name, task, id: "task-name-#{task.id}")
           %td= task.created_at
           %td= task.deadline
+          %td= task.status
           %td
             = link_to(t('helpers.edit.button'), edit_task_path(task), class: 'btn btn-primary mr-3')
             = link_to(t('helpers.delete.button'), task, method: :delete,

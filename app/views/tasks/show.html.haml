@@ -23,6 +23,9 @@
     %tr
       %th= Task.human_attribute_name(:deadline)
       %td= @task.deadline
+    %tr
+      %th= Task.human_attribute_name(:status)
+      %td= @task.status
 
 = link_to(t('helpers.edit.button'), edit_task_path, class: 'btn btn-primary mr-3')
 = link_to(t('helpers.delete.button'), @task, method: :delete,
