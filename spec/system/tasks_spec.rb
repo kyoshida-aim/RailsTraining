@@ -79,28 +79,71 @@ describe "タスク管理機能", type: :system do
   end
 
   describe "新規登録機能" do
-    let!(:attr_name) { Task.human_attribute_name(:name) }
+    describe "名称のバリデーション" do
+      let!(:attr_name) { Task.human_attribute_name(:name) }
 
-    before do
-      visit(new_task_path)
-      fill_in(attr_name, with: task_name)
-      click_button(I18n.t("helpers.submit.create"))
-    end
+      before do
+        visit(new_task_path)
+        fill_in(attr_name, with: task_name)
+        click_button(I18n.t("helpers.submit.create"))
+      end
 
-    context "名前を渡した場合" do
-      let(:task_name) { "適当な名前" }
+      context "名前を渡した場合" do
+        let(:task_name) { "適当な名前" }
 
-      it "新規登録できる" do
-        expect(page).to have_selector(".alert-success", text: "適当な名前")
+        it "新規登録できる" do
+          expect(page).to have_selector(".alert-success", text: "適当な名前")
+        end
+      end
+
+      context "名前を渡さなかった場合" do
+        let(:task_name) { "" }
+
+        it "エラーになる" do
+          within("#error_explanation") do
+            expect(page).to have_content("#{attr_name}を入力してください")
+          end
+        end
       end
     end
 
-    context "名前を渡さなかった場合" do
-      let(:task_name) { "" }
+    describe "終了期限のバリデーション" do
+      let!(:attr_name) { Task.human_attribute_name(:name) }
+      let!(:attr_deadline) { Task.human_attribute_name(:deadline) }
 
-      it "エラーになる" do
-        within("#error_explanation") do
-          expect(page).to have_content("#{attr_name}を入力してください")
+      before do
+        visit(new_task_path)
+        fill_in(attr_name, with: "適当な名称")
+        fill_in(attr_deadline, with: task_deadline)
+        click_button(I18n.t("helpers.submit.create"))
+      end
+
+      context "適切な終了期限を設定した場合" do
+        let(:task_deadline) { 1.day.from_now }
+
+        it "新規登録できる" do
+          expect(page).to have_selector(".alert-success", text: "適当な名称")
+        end
+      end
+
+      context "適切でない終了期限を設定した場合" do
+        # 何故か年の入力(西暦)は6桁まで受け付けるので、2桁足さないと月の数字が年に紛れ込む。
+        # 入力フォーム側で制限をかけるか迷ったが、fill_in自体の仕様な気がするので気がするので先頭に2桁足すことで誤魔化す。
+        # オプションで入力内容を調整できる可能性があるので、今後変更する可能性あり。
+        let(:task_deadline) { Time.zone.now.strftime("00%Y %m %d 00 00") }
+
+        it "新規登録できない" do
+          within("#error_explanation") do
+            expect(page).to have_content(I18n.t("activerecord.errors.messages.deadline.greater_than"))
+          end
+        end
+      end
+
+      context "終了期限を設定しなかった場合" do
+        let(:task_deadline) { nil }
+
+        it "新規登録できる" do
+          expect(page).to have_selector(".alert-success", text: "適当な名称")
         end
       end
     end
