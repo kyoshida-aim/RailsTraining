@@ -14,4 +14,7 @@
     = f.label :deadline
     - min_value = (task.created_at || Time.zone.now).strftime(t('date.formats.default'))
     = f.datetime_field :deadline, min: min_value, id: 'task_deadline', class: 'form-control'
+  .form-group
+    = f.label :status
+    = f.select :status, Task.statuses.keys
   = f.submit nil, class: 'btn btn-primary'
