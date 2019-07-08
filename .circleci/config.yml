@@ -18,7 +18,7 @@ jobs:
           POSTGRES_DB: myapp_test
           POSTGRES_PASSWORD: ""
 
-    working_directory: ~/repo/taskmanager_app
+    working_directory: ~/repo
 
     steps:
       - checkout
@@ -26,18 +26,17 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1.3-dependencies-rspec-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          - v1.4-dependencies-rspec-{{ checksum "Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1.3-dependencies-rspec-
+          - v1.4-dependencies-rspec-
 
       - run:
           name: install dependencies
           command:  bundle install --jobs=4 --retry=3 --path vendor/bundle
-          working_directory: taskmanager_app
       - save_cache:
           paths:
-            - taskmanager_app/vendor/bundle
-          key: v1.3-dependencies-rspec-{{ checksum "taskmanager_app/Gemfile.lock" }}
+            - vendor/bundle
+          key: v1.4-dependencies-rspec-{{ checksum "Gemfile.lock" }}
 
       # Database setup
       - run:
@@ -45,7 +44,6 @@ jobs:
           command: |
             bundle exec rake db:create
             bundle exec rake db:schema:load
-          working_directory: taskmanager_app
 
       # run tests!
       # Change to rspec if you are using rspec
@@ -54,13 +52,12 @@ jobs:
           command: |
             bundle exec rspec --tag ~rubocop \
             --format progress --format RspecJunitFormatter -o tmp/test-results/rspec.xml
-          working_directory: taskmanager_app
 
       # collect reports
       - store_test_results:
-          path: taskmanager_app/tmp/test-results/
+          path: tmp/test-results/
       - store_artifacts:
-          path: taskmanager_app/tmp/test-results/
+          path: tmp/test-results/
           destination: test-results
 
   rubocop:
@@ -72,7 +69,7 @@ jobs:
           PGUSER: myapp
           RAILS_ENV: test
 
-    working_directory: ~/repo/taskmanager_app
+    working_directory: ~/repo
 
     steps:
       - checkout
@@ -80,18 +77,17 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1.3-dependencies-rubocop-{{ checksum "taskmanager_app/Gemfile.lock" }}
+          - v1.4-dependencies-rubocop-{{ checksum "Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1.3-dependencies-rubocop-
+          - v1.4-dependencies-rubocop-
 
       - run:
           name: install dependencies
           command:  bundle install --jobs=4 --retry=3 --path vendor/bundle
-          working_directory: taskmanager_app
       - save_cache:
           paths:
-            - taskmanager_app/vendor/bundle
-          key: v1.3-dependencies-rubocop-{{ checksum "taskmanager_app/Gemfile.lock" }}
+            - vendor/bundle
+          key: v1.4-dependencies-rubocop-{{ checksum "Gemfile.lock" }}
 
       # run rubocop!
       - run:
@@ -99,13 +95,12 @@ jobs:
           command: |
             bundle exec rspec spec/lint/ \
             --format progress --format RspecJunitFormatter -o tmp/test-results/rubocop.xml
-          working_directory: taskmanager_app
 
       # collect reports
       - store_test_results:
-          path: taskmanager_app/tmp/test-results/
+          path: tmp/test-results/
       - store_artifacts:
-          path: taskmanager_app/tmp/test-results/
+          path: tmp/test-results/
           destination: test-results
 
 workflows:
