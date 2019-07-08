@@ -39,9 +39,8 @@ remoteにHerokuのremoteが追加される(はず)
 2. herokuのダッシュボードを開き `Settings` → `Name` からアプリの名称を変更する  
 3. `$ heroku git:remote -a アプリ名`でremoteを追加する
 
-## 手順3: デプロイする
+## 手順3: アプリをデプロイ・更新する
 1. `$ heroku run rake db:migrate`でHeroku側にデータベースを作成する  
-> migration更新の際もこのコマンドの実行が必要？  
 2. `$ git push heroku master`で`master`ブランチの内容をherokuにプッシュするとデプロイできる  
-> 以降herokuにプッシュするとアプリを更新できるはず  
 3. `$ heroku open`でアプリを開き正常に動作しているか確認する。  
+> エラーが発生した場合はまず`1` のデータベースの更新を行ったかどうかを確認する
