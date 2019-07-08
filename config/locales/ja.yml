@@ -7,6 +7,8 @@ ja:
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+        deadline:
+          greater_than: "は現在時刻以降に設定してください"
     models:
       task: タスク
     attributes:
