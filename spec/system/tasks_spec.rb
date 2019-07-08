@@ -127,10 +127,7 @@ describe "タスク管理機能", type: :system do
       end
 
       context "適切でない終了期限を設定した場合" do
-        # 何故か年の入力(西暦)は6桁まで受け付けるので、2桁足さないと月の数字が年に紛れ込む。
-        # 入力フォーム側で制限をかけるか迷ったが、fill_in自体の仕様な気がするので気がするので先頭に2桁足すことで誤魔化す。
-        # オプションで入力内容を調整できる可能性があるので、今後変更する可能性あり。
-        let(:task_deadline) { Time.zone.now.strftime("00%Y %m %d 00 00") }
+        let(:task_deadline) { Time.zone.now.to_datetime }
 
         it "新規登録できない" do
           within("#error_explanation") do
@@ -200,10 +197,7 @@ describe "タスク管理機能", type: :system do
       end
 
       context "適切でない終了期限を設定した場合" do
-        # 何故か年の入力(西暦)は6桁まで受け付けるので、2桁足さないと月の数字が年に紛れ込む。
-        # 入力フォーム側で制限をかけるか迷ったが、fill_in自体の仕様な気がするので気がするので先頭に2桁足すことで誤魔化す。
-        # オプションで入力内容を調整できる可能性があるので、今後変更する可能性あり。
-        let(:task_deadline) { Time.zone.now.strftime("00%Y %m %d 00 00") }
+        let(:task_deadline) { Time.zone.now.to_datetime }
 
         it "新規登録できない" do
           within("#error_explanation") do
