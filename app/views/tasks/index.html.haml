@@ -4,11 +4,11 @@
   .form-group.row
     = f.label :name_cont, Task.human_attribute_name(:name), class: 'col-sm-2 col-form-label'
     .col
-      = f.search_field  :name_cont, class: 'form-control'
+      = f.search_field  :name_cont, class: 'form-control', id: :search_by_name
   .form-group.row
     = f.label :status_eq, Task.human_attribute_name(:status), class: 'col-sm-2 col-form-label'
     .col-2
-      = f.select :status_eq, Task.statuses, { include_blank: true }, class: 'form-control'
+      = f.select :status_eq, Task.statuses, { include_blank: true }, class: 'form-control', id: :search_by_status
   .form-group
     = f.submit t('helpers.submit.search'),class: 'btn btn-outline-primary'
 
