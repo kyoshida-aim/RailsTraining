@@ -131,7 +131,7 @@ describe "タスク管理機能", type: :system do
 
         it "新規登録できない" do
           within("#error_explanation") do
-            expect(page).to have_content(I18n.t("activerecord.errors.messages.deadline.greater_than"))
+            expect(page).to have_content("#{attr_deadline}は現在時刻以降に設定してください")
           end
         end
       end
@@ -201,7 +201,7 @@ describe "タスク管理機能", type: :system do
 
         it "新規登録できない" do
           within("#error_explanation") do
-            expect(page).to have_content(I18n.t("activerecord.errors.messages.deadline.greater_than"))
+            expect(page).to have_content("#{attr_deadline}は現在時刻以降に設定してください")
           end
         end
       end
