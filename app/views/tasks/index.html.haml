@@ -8,7 +8,8 @@
   .form-group.row
     = f.label :status_eq, Task.human_attribute_name(:status), class: 'col-sm-2 col-form-label'
     .col-2
-      = f.select :status_eq, Task.statuses, { include_blank: true }, class: 'form-control', id: :search_by_status
+      - keys = Task.statuses.transform_keys{ |k| Task.statuses_i18n[k] }
+      = f.select :status_eq, keys, { include_blank: true }, class: 'form-control', id: :search_by_status
   .form-group
     = f.submit t('helpers.submit.search'),class: 'btn btn-outline-primary'
 
@@ -29,7 +30,7 @@
           %td= link_to(task.name, task, id: "task-name-#{task.id}")
           %td= task.created_at
           %td= task.deadline
-          %td= task.status
+          %td= task.status_i18n
           %td
             = link_to(t('helpers.edit.button'), edit_task_path(task), class: 'btn btn-primary mr-3')
             = link_to(t('helpers.delete.button'), task, method: :delete,

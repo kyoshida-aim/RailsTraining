@@ -79,3 +79,5 @@ gem "haml-rails"
 gem "bootstrap"
 
 gem "ransack"
+
+gem "enum_help", "~> 0.0.17"

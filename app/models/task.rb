@@ -1,5 +1,5 @@
 class Task < ApplicationRecord
-  enum status: I18n.t(["not_started", "in_progress", "finished"], scope: "activerecord.attributes.task")
+  enum status: { not_started: 0, in_progress: 1, finished: 2 }
 
   validates :name, presence: true, length: { maximum: 30 }
 

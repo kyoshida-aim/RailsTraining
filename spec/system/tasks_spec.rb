@@ -62,9 +62,9 @@ describe "タスク管理機能", type: :system do
     end
 
     describe "検索" do
-      let!(:task_a) { FactoryBot.create(:task, name: "タスク", status: "着手中") }
-      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", status: "終了済") }
-      let!(:task_c) { FactoryBot.create(:task, name: "C", status: "終了済") }
+      let!(:task_a) { FactoryBot.create(:task, name: "タスク", status: :in_progress) }
+      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", status: :finished) }
+      let!(:task_c) { FactoryBot.create(:task, name: "C", status: :finished) }
 
       before do
         visit(tasks_path)
@@ -88,7 +88,7 @@ describe "タスク管理機能", type: :system do
 
       context "ステータスで検索した場合" do
         let(:task_name) { "" }
-        let(:task_status) { "終了済" }
+        let(:task_status) { Task.statuses_i18n[:finished] }
 
         it "指定したステータスのタスクのみが表示される" do
           tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
@@ -101,7 +101,7 @@ describe "タスク管理機能", type: :system do
 
       context "名称+ステータスで検索した場合" do
         let(:task_name) { "タスク" }
-        let(:task_status) { "終了済" }
+        let(:task_status) { Task.statuses_i18n[:finished] }
 
         it "全ての条件に一致するタスクのみが表示される" do
           tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
