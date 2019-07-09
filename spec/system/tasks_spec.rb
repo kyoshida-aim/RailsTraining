@@ -60,6 +60,56 @@ describe "タスク管理機能", type: :system do
         end
       end
     end
+
+    describe "検索" do
+      let!(:task_a) { FactoryBot.create(:task, name: "タスク", status: "着手中") }
+      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", status: "終了済") }
+      let!(:task_c) { FactoryBot.create(:task, name: "C", status: "終了済") }
+
+      before do
+        visit(tasks_path)
+        fill_in(:search_by_name, with: task_name)
+        select(task_status, from: :search_by_status) # rubocop: disable Lint/Void
+        click_on(I18n.t("helpers.submit.search"))
+      end
+
+      context "名称で検索した場合" do
+        let(:task_name) { "タスク" }
+        let(:task_status) { "" }
+
+        it "指定したタスク名を持つタスクのみが表示される" do
+          tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
+
+          expect(tasks).to include(task_a.name)
+          expect(tasks).to include(task_b.name)
+          expect(tasks).not_to include(task_c.name)
+        end
+      end
+
+      context "ステータスで検索した場合" do
+        let(:task_name) { "" }
+        let(:task_status) { "終了済" }
+
+        it "指定したステータスのタスクのみが表示される" do
+          tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
+
+          expect(tasks).not_to include(task_a.name)
+          expect(tasks).to include(task_b.name)
+          expect(tasks).to include(task_c.name)
+        end
+      end
+
+      context "名称+ステータスで検索した場合" do
+        let(:task_name) { "タスク" }
+        let(:task_status) { "終了済" }
+
+        it "全ての条件に一致するタスクのみが表示される" do
+          tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
+
+          expect(tasks).to eq([task_b.name])
+        end
+      end
+    end
   end
 
   describe "詳細表示機能" do
