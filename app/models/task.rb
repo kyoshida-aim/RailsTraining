@@ -5,6 +5,6 @@ class Task < ApplicationRecord
   private
 
     def validate_deadline_minimum_value
-      errors.add(:deadline, "は現在時刻以降に設定してください") if !deadline.nil? && deadline < Time.zone.now
+      errors.add(:deadline, :after) if !deadline.nil? && deadline < Time.zone.now
     end
 end
