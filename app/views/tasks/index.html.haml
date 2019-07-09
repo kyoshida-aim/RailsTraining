@@ -10,7 +10,7 @@
     .col-2
       = f.select :status_eq, Task.statuses, { include_blank: true }, class: 'form-control'
   .form-group
-    = f.submit class: 'btn btn-outline-primary'
+    = f.submit t('helpers.submit.search'),class: 'btn btn-outline-primary'
 
 = link_to(t('helpers.create.button'), new_task_path, class: 'btn btn-primary')
 
