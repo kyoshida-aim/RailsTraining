@@ -122,6 +122,11 @@ describe "タスク管理機能", type: :system do
 
         expect(tasks.size).to eq(50)
       end
+
+      it "ページ移動ができる" do
+        click_link(id: "page-next")
+        expect(page).to have_current_path(/\?page=/)
+      end
     end
   end
 
