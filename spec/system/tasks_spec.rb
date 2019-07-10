@@ -15,10 +15,10 @@ describe "タスク管理機能", type: :system do
   end
 
   describe "一覧表示機能" do
-    describe "並び順" do
-      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", created_at: Time.zone.now, deadline: nil, priority: :low) }
-      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", created_at: 1.day.ago, deadline: 2.day.from_now, priority: :middle) }
-      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", created_at: 1.day.from_now, deadline: 3.day.from_now, priority: :high) }
+    describe "作成日順ソート" do
+      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", created_at: Time.zone.now) }
+      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", created_at: 1.day.ago) }
+      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", created_at: 1.day.from_now) }
 
       context "初期状態の場合" do
         it "作成日順に並んでいる" do
@@ -30,6 +30,12 @@ describe "タスク管理機能", type: :system do
           expect(tasks[2]).to have_content(task_b.name)
         end
       end
+    end
+
+    describe "終了期日順ソート" do
+      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", deadline: nil) }
+      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", deadline: 2.day.from_now) }
+      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", deadline: 3.day.from_now) }
 
       context "終了期日を一回クリックすると" do
         it "終了期日の昇順ソートになる" do
@@ -59,6 +65,12 @@ describe "タスク管理機能", type: :system do
           expect(tasks[2]).to have_content(task_b.name)
         end
       end
+    end
+
+    describe "優先度順ソート" do
+      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", priority: :low) }
+      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", priority: :middle) }
+      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", priority: :high) }
 
       context "優先度を一回クリックすると" do
         it "優先度の降順ソートになる" do
