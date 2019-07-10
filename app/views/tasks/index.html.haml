@@ -23,7 +23,7 @@
       %th= Task.human_attribute_name(:created_at)
       %th= sort_link(@q, :deadline, default_order: :asc)
       %th= Task.human_attribute_name(:status)
-      %th= Task.human_attribute_name(:priority)
+      %th= sort_link(@q, :priority, default_order: :desc)
       %th
     %tbody
       - @tasks.each do |task|

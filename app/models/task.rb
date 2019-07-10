@@ -6,7 +6,7 @@ class Task < ApplicationRecord
   validate :validate_deadline_minimum_value
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[name status deadline]
+    %w[name status deadline priority]
   end
 
   def self.ransackable_associations(auth_object = nil)
