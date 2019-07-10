@@ -113,7 +113,7 @@ describe "タスク管理機能", type: :system do
 
     describe "ページネーション" do
       before do
-        FactoryBot.create_list(:task, 1000)
+        FactoryBot.create_list(:task, 51)
         visit(tasks_path)
       end
 
