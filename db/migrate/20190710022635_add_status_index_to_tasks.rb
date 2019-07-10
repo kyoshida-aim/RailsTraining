@@ -1,9 +1,5 @@
 class AddStatusIndexToTasks < ActiveRecord::Migration[5.2]
-  def up
+  def change
     add_index(:tasks, :status)
-  end
-
-  def down
-    remove_index(:tasks, :status)
   end
 end
