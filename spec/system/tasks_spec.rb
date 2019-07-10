@@ -62,11 +62,11 @@ describe "タスク管理機能", type: :system do
     end
 
     describe "検索" do
-      let!(:task_a) { FactoryBot.create(:task, name: "タスク", status: :in_progress) }
-      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", status: :finished) }
-      let!(:task_c) { FactoryBot.create(:task, name: "C", status: :finished) }
-
       before do
+        FactoryBot.create(:task, name: "タスク", status: :in_progress)
+        FactoryBot.create(:task, name: "タスクB", status: :finished)
+        FactoryBot.create(:task, name: "C", status: :finished)
+
         visit(tasks_path)
         fill_in(:search_by_name, with: task_name)
         select(task_status, from: :search_by_status) # rubocop: disable Lint/Void
@@ -80,9 +80,9 @@ describe "タスク管理機能", type: :system do
         it "指定したタスク名を持つタスクのみが表示される" do
           tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
 
-          expect(tasks).to include(task_a.name)
-          expect(tasks).to include(task_b.name)
-          expect(tasks).not_to include(task_c.name)
+          expect(tasks).to include("タスク")
+          expect(tasks).to include("タスクB")
+          expect(tasks).not_to include("C")
         end
       end
 
@@ -93,9 +93,9 @@ describe "タスク管理機能", type: :system do
         it "指定したステータスのタスクのみが表示される" do
           tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
 
-          expect(tasks).not_to include(task_a.name)
-          expect(tasks).to include(task_b.name)
-          expect(tasks).to include(task_c.name)
+          expect(tasks).not_to include("タスク")
+          expect(tasks).to include("タスクB")
+          expect(tasks).to include("C")
         end
       end
 
@@ -106,7 +106,7 @@ describe "タスク管理機能", type: :system do
         it "全ての条件に一致するタスクのみが表示される" do
           tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
 
-          expect(tasks).to eq([task_b.name])
+          expect(tasks).to eq(["タスクB"])
         end
       end
     end
