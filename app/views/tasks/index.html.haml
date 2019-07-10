@@ -1,5 +1,18 @@
 %h1 Tasks#index
 
+= search_form_for @q, class: 'mb-5' do |f|
+  .form-group.row
+    = f.label :name_cont, Task.human_attribute_name(:name), class: 'col-sm-2 col-form-label'
+    .col
+      = f.search_field  :name_cont, class: 'form-control', id: :search_by_name
+  .form-group.row
+    = f.label :status_eq, Task.human_attribute_name(:status), class: 'col-sm-2 col-form-label'
+    .col-2
+      - keys = Task.statuses.transform_keys{ |k| Task.statuses_i18n[k] }
+      = f.select :status_eq, keys, { include_blank: true }, class: 'form-control', id: :search_by_status
+  .form-group
+    = f.submit t('helpers.submit.search'),class: 'btn btn-outline-primary'
+
 = link_to(t('helpers.create.button'), new_task_path, class: 'btn btn-primary')
 
 .mb-3
@@ -9,6 +22,7 @@
       %th= Task.human_attribute_name(:name)
       %th= Task.human_attribute_name(:created_at)
       %th= sort_link(@q, :deadline, default_order: :asc)
+      %th= Task.human_attribute_name(:status)
       %th
     %tbody
       - @tasks.each do |task|
@@ -16,6 +30,7 @@
           %td= link_to(task.name, task, id: "task-name-#{task.id}")
           %td= task.created_at
           %td= task.deadline
+          %td= task.status_i18n
           %td
             = link_to(t('helpers.edit.button'), edit_task_path(task), class: 'btn btn-primary mr-3')
             = link_to(t('helpers.delete.button'), task, method: :delete,
