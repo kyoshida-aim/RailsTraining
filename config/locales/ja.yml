@@ -23,12 +23,17 @@ ja:
         updated_at: 更新日時
         deadline: 終了期限
         status: ステータス
+        priority: 優先度
   enums:
     task:
       status:
         not_started: 未着手
         in_progress: 着手中
         finished: 終了済
+      priority:
+        low: 低
+        middle: 中
+        high: 高
   date:
     abbr_day_names:
     - 日
