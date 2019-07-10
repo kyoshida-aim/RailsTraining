@@ -16,9 +16,9 @@ describe "タスク管理機能", type: :system do
 
   describe "一覧表示機能" do
     describe "並び順" do
-      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", created_at: Time.zone.now, deadline: nil) }
-      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", created_at: 1.day.ago, deadline: 2.day.from_now) }
-      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", created_at: 1.day.from_now, deadline: 3.day.from_now) }
+      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", created_at: Time.zone.now, deadline: nil, priority: :low) }
+      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", created_at: 1.day.ago, deadline: 2.day.from_now, priority: :middle) }
+      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", created_at: 1.day.from_now, deadline: 3.day.from_now, priority: :high) }
 
       context "初期状態の場合" do
         it "作成日順に並んでいる" do
@@ -57,6 +57,35 @@ describe "タスク管理機能", type: :system do
           expect(tasks[0]).to have_content(task_a.name)
           expect(tasks[1]).to have_content(task_c.name)
           expect(tasks[2]).to have_content(task_b.name)
+        end
+      end
+
+      context "優先度を一回クリックすると" do
+        it "優先度の降順ソートになる" do
+          visit(tasks_path)
+          click_on(Task.human_attribute_name(:priority))
+          # クリックしてからページが読み込まれるまでに多少のウェイト入れないとtasksの取得ができない時がある
+          sleep 1
+          # "task-name-{タスクのID}"であるidタグが付いている項目を取得
+          tasks = all(id: /\Atask-name-(\d+)\z/)
+          expect(tasks[0]).to have_content(task_c.name)
+          expect(tasks[1]).to have_content(task_b.name)
+          expect(tasks[2]).to have_content(task_a.name)
+        end
+      end
+
+      context "優先度を二回クリックすると" do
+        it "優先度の昇順ソートになる" do
+          visit(tasks_path)
+          click_on(Task.human_attribute_name(:priority))
+          click_on(Task.human_attribute_name(:priority))
+          # クリックしてからページが読み込まれるまでに多少のウェイト入れないとtasksの取得ができない時がある
+          sleep 1
+          # "task-name-{タスクのID}"であるidタグが付いている項目を取得
+          tasks = all(id: /\Atask-name-(\d+)\z/)
+          expect(tasks[0]).to have_content(task_a.name)
+          expect(tasks[1]).to have_content(task_b.name)
+          expect(tasks[2]).to have_content(task_c.name)
         end
       end
     end
