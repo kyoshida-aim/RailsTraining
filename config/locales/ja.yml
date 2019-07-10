@@ -23,6 +23,7 @@ ja:
         updated_at: 更新日時
         deadline: 終了期限
         status: ステータス
+        priority: 優先度
   enums:
     task:
       status:
