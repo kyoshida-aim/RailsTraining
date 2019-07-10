@@ -1,5 +1,6 @@
 class Task < ApplicationRecord
   enum status: { not_started: 0, in_progress: 1, finished: 2 }
+  enum priority: { low: 0, middle: 1, high: 2 }
 
   validates :name, presence: true, length: { maximum: 30 }
   validate :validate_deadline_minimum_value

@@ -29,6 +29,10 @@ ja:
         not_started: 未着手
         in_progress: 着手中
         finished: 終了済
+      priority:
+        low: 低
+        middle: 中
+        high: 高
   date:
     abbr_day_names:
     - 日
