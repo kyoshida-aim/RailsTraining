@@ -1,6 +1,8 @@
+require "faker"
+
 FactoryBot.define do
   factory :user do
-    login_id { "MyString" }
-    password_digest { "MyString" }
+    login_id { Faker::Internet.unique.username }
+    password_digest { Faker::Internet.password }
   end
 end
