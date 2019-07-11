@@ -49,3 +49,6 @@ Rails/UnknownEnv:
     - test        # rubocop default.yml
     - production  # rubocop default.yml
     - staging
+
+Rails/NotNullColumn:
+  Enabled: false
