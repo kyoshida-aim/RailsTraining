@@ -151,6 +151,24 @@ describe "タスク管理機能", type: :system do
         end
       end
     end
+
+    describe "ページネーション" do
+      before do
+        FactoryBot.create_list(:task, 51)
+        visit(tasks_path)
+      end
+
+      it "1ページに表示される件数が50" do
+        tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
+
+        expect(tasks.size).to eq(50)
+      end
+
+      it "ページ移動ができる" do
+        click_link(id: "page-next")
+        expect(page).to have_current_path(/\?page=/)
+      end
+    end
   end
 
   describe "詳細表示機能" do

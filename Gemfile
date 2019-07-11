@@ -81,3 +81,5 @@ gem "bootstrap"
 gem "ransack"
 
 gem "enum_help", "~> 0.0.17"
+
+gem "kaminari"
