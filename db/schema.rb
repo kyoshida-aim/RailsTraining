@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2019_07_10_091902) do
     t.datetime "deadline"
     t.integer "status", default: 0
     t.integer "priority", default: 1, null: false
-    t.bigint "user_id", default: 0, null: false
+    t.bigint "user_id", null: false
     t.index ["status"], name: "index_tasks_on_status"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
