@@ -172,7 +172,11 @@ ja:
   helpers:
     login:
       header: ログイン
+      name: ログイン
       success: ログインしました
+    logout:
+      name: ログアウト
+      success: ログアウトしました
     select:
       prompt: 選択してください
     submit:
