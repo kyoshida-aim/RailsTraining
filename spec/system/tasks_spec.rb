@@ -1,24 +1,33 @@
 require "rails_helper"
 
 describe "タスク管理機能", type: :system do
-  let!(:task_a) do
-    FactoryBot.create(:task, name: "最初のタスク", description: "検証用のタスク")
+  let!(:user_a) { FactoryBot.create(:user, login_id: "ユーザーA") }
+
+  before do
+    visit(login_path)
+    fill_in(with: user_a.login_id, id: "session_login_id")
+    fill_in(with: user_a.password, id: "session_password")
+    click_button(I18n.t("helpers.submit.login"))
   end
 
   describe "一覧表示機能" do
-    context "一覧画面に" do
-      it "最初のタスクの名称が表示される" do
-        visit(tasks_path)
-        expect(page).to have_content("最初のタスク")
-      end
+    before do
+      FactoryBot.create(:task, name: "ユーザーAのタスク", user: user_a)
+      FactoryBot.create(:task, name: "適当なタスク")
+    end
+
+    it "ユーザーAのタスクのみが表示される" do
+      visit(tasks_path)
+      expect(page).to have_content("ユーザーAのタスク")
+      expect(page).not_to have_content("適当なタスク")
     end
   end
 
   describe "一覧表示機能" do
     describe "作成日順ソート" do
-      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", created_at: Time.zone.now) }
-      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", created_at: 1.day.ago) }
-      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", created_at: 1.day.from_now) }
+      let!(:task_a) { FactoryBot.create(:task, user: user_a, name: "タスクA", created_at: Time.zone.now) }
+      let!(:task_b) { FactoryBot.create(:task, user: user_a, name: "タスクB", created_at: 1.day.ago) }
+      let!(:task_c) { FactoryBot.create(:task, user: user_a, name: "タスクC", created_at: 1.day.from_now) }
 
       context "初期状態の場合" do
         it "作成日順に並んでいる" do
@@ -33,9 +42,9 @@ describe "タスク管理機能", type: :system do
     end
 
     describe "終了期日順ソート" do
-      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", deadline: nil) }
-      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", deadline: 2.day.from_now) }
-      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", deadline: 3.day.from_now) }
+      let!(:task_a) { FactoryBot.create(:task, user: user_a, name: "タスクA", deadline: nil) }
+      let!(:task_b) { FactoryBot.create(:task, user: user_a, name: "タスクB", deadline: 2.day.from_now) }
+      let!(:task_c) { FactoryBot.create(:task, user: user_a, name: "タスクC", deadline: 3.day.from_now) }
 
       context "終了期日を一回クリックすると" do
         it "終了期日の昇順ソートになる" do
@@ -68,9 +77,9 @@ describe "タスク管理機能", type: :system do
     end
 
     describe "優先度順ソート" do
-      let!(:task_a) { FactoryBot.create(:task, name: "タスクA", priority: :low) }
-      let!(:task_b) { FactoryBot.create(:task, name: "タスクB", priority: :middle) }
-      let!(:task_c) { FactoryBot.create(:task, name: "タスクC", priority: :high) }
+      let!(:task_a) { FactoryBot.create(:task, user: user_a, name: "タスクA", priority: :low) }
+      let!(:task_b) { FactoryBot.create(:task, user: user_a, name: "タスクB", priority: :middle) }
+      let!(:task_c) { FactoryBot.create(:task, user: user_a, name: "タスクC", priority: :high) }
 
       context "優先度を一回クリックすると" do
         it "優先度の降順ソートになる" do
@@ -104,9 +113,9 @@ describe "タスク管理機能", type: :system do
 
     describe "検索" do
       before do
-        FactoryBot.create(:task, name: "タスク", status: :in_progress)
-        FactoryBot.create(:task, name: "タスクB", status: :finished)
-        FactoryBot.create(:task, name: "C", status: :finished)
+        FactoryBot.create(:task, user: user_a, name: "タスク", status: :in_progress)
+        FactoryBot.create(:task, user: user_a, name: "タスクB", status: :finished)
+        FactoryBot.create(:task, user: user_a, name: "C", status: :finished)
 
         visit(tasks_path)
         fill_in(:search_by_name, with: task_name)
@@ -154,7 +163,7 @@ describe "タスク管理機能", type: :system do
 
     describe "ページネーション" do
       before do
-        FactoryBot.create_list(:task, 51)
+        FactoryBot.create_list(:task, 51, user: user_a)
         visit(tasks_path)
       end
 
@@ -172,9 +181,11 @@ describe "タスク管理機能", type: :system do
   end
 
   describe "詳細表示機能" do
+    let!(:task) { FactoryBot.create(:task, user: user_a, name: "最初のタスク", description: "検証用のタスク") }
+
     context "タスクの詳細画面を開いた時に" do
       before do
-        visit(task_path(task_a))
+        visit(task_path(task))
       end
 
       it "最初のタスクの名称が表示される" do
@@ -201,7 +212,6 @@ describe "タスク管理機能", type: :system do
         let(:task_name) { "適当な名前" }
 
         it "新規登録できる" do
-          skip "ログイン機能実装するまでテストできない"
           expect(page).to have_selector(".alert-success", text: "適当な名前")
         end
       end
@@ -210,7 +220,6 @@ describe "タスク管理機能", type: :system do
         let(:task_name) { "" }
 
         it "エラーになる" do
-          skip "ログイン機能実装するまでテストできない"
           within("#error_explanation") do
             expect(page).to have_content("#{attr_name}を入力してください")
           end
@@ -233,7 +242,6 @@ describe "タスク管理機能", type: :system do
         let(:task_deadline) { 1.day.from_now }
 
         it "新規登録できる" do
-          skip "ログイン機能実装するまでテストできない"
           expect(page).to have_selector(".alert-success", text: "適当な名称")
         end
       end
@@ -242,7 +250,6 @@ describe "タスク管理機能", type: :system do
         let(:task_deadline) { Time.zone.now.to_datetime }
 
         it "新規登録できない" do
-          skip "ログイン機能実装するまでテストできない"
           within("#error_explanation") do
             expect(page).to have_content("#{attr_deadline}は現在時刻以降に設定してください")
           end
@@ -253,7 +260,6 @@ describe "タスク管理機能", type: :system do
         let(:task_deadline) { nil }
 
         it "新規登録できる" do
-          skip "ログイン機能実装するまでテストできない"
           expect(page).to have_selector(".alert-success", text: "適当な名称")
         end
       end
@@ -262,42 +268,44 @@ describe "タスク管理機能", type: :system do
 
   describe "更新機能" do
     describe "二通りのタスク編集方法" do
+      let!(:task) { FactoryBot.create(:task, user: user_a, name: "最初のタスク") }
       let!(:attr_description) { Task.human_attribute_name(:description) }
 
       context "一覧画面からタスクの編集画面に移動した時" do
         before do
           visit(tasks_path)
-          click_link(href: edit_task_path(task_a))
+          click_link(href: edit_task_path(task))
           fill_in(attr_description, with: "適当な説明文")
           click_button(I18n.t("helpers.submit.update"))
         end
 
         it "正常に更新できる" do
-          expect(page).to have_selector(".alert-success", text: task_a.name)
+          expect(page).to have_selector(".alert-success", text: task.name)
           expect(page).to have_content("適当な説明文")
         end
       end
 
       context "詳細画面からタスクの編集画面に移動した時" do
         before do
-          visit(task_path(task_a))
+          visit(task_path(task))
           click_on(I18n.t("helpers.edit.button"))
           fill_in(attr_description, with: "さらに適当な説明文")
           click_button(I18n.t("helpers.submit.update"))
         end
 
         it "正常に更新できる" do
-          expect(page).to have_selector(".alert-success", text: task_a.name)
+          expect(page).to have_selector(".alert-success", text: task.name)
           expect(page).to have_content("さらに適当な説明文")
         end
       end
     end
 
     describe "終了期限のバリデーション" do
+      let!(:task) { FactoryBot.create(:task, user: user_a, name: "最初のタスク") }
       let!(:attr_deadline) { Task.human_attribute_name(:deadline) }
 
       before do
-        visit(edit_task_path(task_a))
+        visit(edit_task_path(task))
         fill_in(attr_deadline, with: task_deadline)
         click_button(I18n.t("helpers.submit.update"))
       end
@@ -306,7 +314,7 @@ describe "タスク管理機能", type: :system do
         let(:task_deadline) { 1.day.from_now }
 
         it "新規登録できる" do
-          expect(page).to have_selector(".alert-success", text: task_a.name)
+          expect(page).to have_selector(".alert-success", text: task.name)
         end
       end
 
@@ -324,7 +332,7 @@ describe "タスク管理機能", type: :system do
         let(:task_deadline) { nil }
 
         it "新規登録できる" do
-          expect(page).to have_selector(".alert-success", text: task_a.name)
+          expect(page).to have_selector(".alert-success", text: task.name)
         end
       end
     end
@@ -332,8 +340,10 @@ describe "タスク管理機能", type: :system do
 
   describe "削除機能" do
     context "削除ボタンを押した時" do
+      let!(:task) { FactoryBot.create(:task, user: user_a, name: "最初のタスク") }
+
       it "削除できる" do
-        visit(task_path(task_a))
+        visit(task_path(task))
         click_on(I18n.t("helpers.delete.button"))
         page.driver.browser.switch_to.alert.accept
 

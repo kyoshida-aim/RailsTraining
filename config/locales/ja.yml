@@ -14,6 +14,7 @@ ja:
               after: は現在時刻以降に設定してください
     models:
       task: タスク
+      user: ユーザー
     attributes:
       task:
         id: ID
@@ -24,6 +25,19 @@ ja:
         deadline: 終了期限
         status: ステータス
         priority: 優先度
+      user:
+        login_id: ログインID
+        password: パスワード
+  sessions:
+    new:
+      header: ログイン
+    create:
+      login:
+        success: ログインしました
+        failed: ログインに失敗しました
+    destroy:
+      logout:
+        success: ログアウトしました
   enums:
     task:
       status:
@@ -166,6 +180,11 @@ ja:
         one: "%{model}にエラーが発生しました"
         other: "%{model}に%{count}個のエラーが発生しました"
   helpers:
+    login:
+      name: ログイン
+      as: "%{login_id}でログイン中"
+    logout:
+      name: ログアウト
     select:
       prompt: 選択してください
     submit:
@@ -173,6 +192,7 @@ ja:
       submit: 保存する
       update: 更新する
       search: 検索する
+      login: ログインする
     list: 一覧
     create:
       button: 新規登録

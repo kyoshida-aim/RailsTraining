@@ -1,0 +1,11 @@
+%h1= t('.header')
+
+= form_with(scope: :session, local: true) do |f|
+  .form_group
+    = f.label(:login_id, User.human_attribute_name(:login_id))
+    = f.text_field(:login_id, class: 'form-control', id: 'session_login_id')
+  .form_group
+    = f.label(:password, User.human_attribute_name(:password))
+    = f.password_field(:password , class: 'form-control', id: 'session_password')
+  %br
+  = f.submit(t('helpers.submit.login'), class: 'btn btn-primary')

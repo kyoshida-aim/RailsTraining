@@ -10,7 +10,18 @@
   %body
     .app-title.navbar.navbar-expand-md.navbar-light.bg-light
       .navbar-brand TaskmanagerApp
+
+      %ul.navbar-nav.ml-auto
+        - if current_user
+          %li.navbar-text= t("helpers.login.as", login_id: current_user.login_id)
+          %li.nav-item= link_to(Task.model_name.human + t("helpers.list"), tasks_path, class: 'nav-link')
+          -# %li.nav-item= link_to(User.model_name.human + t("helpers.list"), users_path, class: "nav-link")
+          %li.nav-item= link_to(t("helpers.logout.name"), logout_path, method: :delete, class: "nav-link")
+        - else
+          %li.nav-item= link_to(t("helpers.login.name"), login_path, class: "nav-link")
     .container
       - if flash.notice.present?
         .alert.alert-success= flash.notice
+      - if flash[:warning].present?
+        .alert.alert-warning= flash[:warning]
       = yield
