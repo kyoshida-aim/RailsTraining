@@ -45,3 +45,10 @@ remoteにHerokuのremoteが追加される(はず)
 3. (migrationを実行した場合) `heroku restart` でアプリを再起動する
 4. `$ heroku open`でアプリを開き正常に動作しているか確認する。  
 > エラーが発生した場合はまず`2` のデータベースの更新を行ったかどうかを確認する
+
+# メンテナンス等で使用する各コマンド
+## 初期データ作成
+`$ heroku run rake db:seed`
+
+## railsコンソールを起動する
+`$ heroku run rails console`
