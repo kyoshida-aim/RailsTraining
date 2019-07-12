@@ -6,7 +6,6 @@ describe Task, type: :model do
 
     context "30文字以上の場合に" do
       it "バリデーションエラーが発生する" do
-        skip "ログイン機能実装するまでテストできない"
         task.name = Faker::String.random(29)
         expect(task.valid?).to eq(true)
 
