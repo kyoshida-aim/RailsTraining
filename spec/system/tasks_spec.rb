@@ -12,12 +12,14 @@ describe "タスク管理機能", type: :system do
 
   describe "一覧表示機能" do
     before do
-      FactoryBot.create(:task, user: user_a, name: "最初のタスク")
+      FactoryBot.create(:task, name: "ユーザーAのタスク", user: user_a)
+      FactoryBot.create(:task, name: "適当なタスク")
     end
 
-    it "最初のタスクの名称が表示される" do
+    it "ユーザーAのタスクのみが表示される" do
       visit(tasks_path)
-      expect(page).to have_content("最初のタスク")
+      expect(page).to have_content("ユーザーAのタスク")
+      expect(page).not_to have_content("適当なタスク")
     end
   end
 
