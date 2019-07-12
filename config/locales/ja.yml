@@ -34,6 +34,7 @@ ja:
     create:
       login:
         success: ログインしました
+        failed: ログインに失敗しました
     destroy:
       logout:
         success: ログアウトしました
