@@ -28,6 +28,9 @@ ja:
       user:
         login_id: ログインID
         password: パスワード
+  sessions:
+    new:
+      header: ログイン
   enums:
     task:
       status:
@@ -171,7 +174,6 @@ ja:
         other: "%{model}に%{count}個のエラーが発生しました"
   helpers:
     login:
-      header: ログイン
       name: ログイン
       success: ログインしました
       as: "%{login_id}でログイン中"
