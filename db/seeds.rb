@@ -7,6 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 User.find_or_create_by!(login_id: "admin") do |user|
-  user.password = "user"
-  user.password_confirmation = "user"
+  user.password = Rails.application.credentials.admin_user[:password]
+  user.password_confirmation = Rails.application.credentials.admin_user[:password]
 end
