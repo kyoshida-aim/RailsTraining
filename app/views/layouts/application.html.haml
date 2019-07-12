@@ -13,6 +13,7 @@
 
       %ul.navbar-nav.ml-auto
         - if current_user
+          %li.navbar-text= t("helpers.login.as", login_id: current_user.login_id)
           %li.nav-item= link_to(Task.model_name.human + t("helpers.list"), tasks_path, class: 'nav-link')
           %li.nav-item= link_to(User.model_name.human + t("helpers.list"), tasks_path, class: "nav-link")
           %li.nav-item= link_to(t("helpers.logout.name"), logout_path, method: :delete, class: "nav-link")
