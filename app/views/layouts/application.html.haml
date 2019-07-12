@@ -22,6 +22,6 @@
     .container
       - if flash.notice.present?
         .alert.alert-success= flash.notice
-      - unless flash[:warning].nil?
+      - if flash[:warning].present?
         .alert.alert-warning= flash[:warning]
       = yield
