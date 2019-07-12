@@ -31,6 +31,12 @@ ja:
   sessions:
     new:
       header: ログイン
+    create:
+      login:
+        success: ログインしました
+    destroy:
+      logout:
+        success: ログアウトしました
   enums:
     task:
       status:
@@ -175,11 +181,9 @@ ja:
   helpers:
     login:
       name: ログイン
-      success: ログインしました
       as: "%{login_id}でログイン中"
     logout:
       name: ログアウト
-      success: ログアウトしました
     select:
       prompt: 選択してください
     submit:

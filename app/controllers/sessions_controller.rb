@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(session_params[:password])
       session[:user_id] = user.id
-      redirect_to(root_path, notice: t("helpers.login.success"))
+      redirect_to(root_path, notice: t(".login.success"))
     else
       render :new
     end
@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    redirect_to(root_path, notice: t("helpers.logout.success"))
+    redirect_to(root_path, notice: t(".logout.success"))
   end
 
   private
