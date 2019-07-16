@@ -1,2 +1,26 @@
-%h1 Admin::Users#index
-%p Find me in app/views/admin/users/index.html.haml
+%h1= t(".header")
+
+新規登録
+-# 後ほどユーザー登録へのリンクへ置き換え
+
+.mb-3
+%table.table.table-hover
+  %thead.thead-default
+    %tr
+      %th= User.human_attribute_name(:login_id)
+      %th= User.human_attribute_name(:admin)
+      %th= User.human_attribute_name(:created_at)
+      %th= User.human_attribute_name(:updated_at)
+      %th
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= link_to(user.login_id, [:admin, user], id: "user-id-#{user.id}")
+          %td= user.admin? ? t("helpers.admin.true") : t("helpers.admin.false")
+          %td= user.created_at
+          %td= user.updated_at
+          %td
+            -# 中身未実装
+            = link_to(t(".edit.button"), edit_admin_user_path(user), class: 'btn btn-primary mr-3')
+            -# 中身未実装
+            = link_to(t(".delete.button"), method: :delete, data: { confirm: t(".delete.confirm", user: user.login_id)}, class: "btn btn-danger" )

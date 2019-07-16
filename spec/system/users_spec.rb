@@ -79,4 +79,27 @@ describe "ユーザー関連機能", type: :system do
       expect(page).to have_current_path(%r{/login})
     end
   end
+
+  describe "ユーザー一覧画面" do
+    let!(:user) { FactoryBot.create(:user, login_id: "ユーザーA", admin: true) }
+
+    before do
+      FactoryBot.create(:user, login_id: "ユーザーB")
+
+      visit(login_path)
+      fill_in(with: user.login_id, id: "session_login_id")
+      fill_in(with: user.password, id: "session_password")
+      click_button(I18n.t("helpers.submit.login"))
+    end
+
+    it "一覧画面にユーザーが表示される" do
+      visit(admin_users_path)
+
+      # "user-id-{ユーザーのID}"のタグがついた要素を取得し、平文で保存する
+      users = all(id: /\Auser-id-(?:\d+)\z/).map(&:text)
+
+      expect(users).to have_content("ユーザーA")
+      expect(users).to have_content("ユーザーB")
+    end
+  end
 end

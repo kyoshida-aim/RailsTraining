@@ -28,6 +28,17 @@ ja:
       user:
         login_id: ログインID
         password: パスワード
+  admin:
+    users:
+      index:
+        header: ユーザー一覧
+        create:
+          button: 登録
+        edit:
+          button: 編集
+        delete:
+          button: 削除
+          confirm: "ユーザー「%{user}」を削除します、よろしいですか？"
   sessions:
     new:
       header: ログイン
@@ -180,6 +191,9 @@ ja:
         one: "%{model}にエラーが発生しました"
         other: "%{model}に%{count}個のエラーが発生しました"
   helpers:
+    admin:
+      true: あり
+      false: なし
     login:
       name: ログイン
       as: "%{login_id}でログイン中"
