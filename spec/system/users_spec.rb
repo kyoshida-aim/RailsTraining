@@ -182,4 +182,21 @@ describe "ユーザー関連機能", type: :system do
       end
     end
   end
+
+  describe "ユーザー詳細画面" do
+    let!(:user) { FactoryBot.create(:user, login_id: "ユーザーA", admin: true) }
+
+    before do
+      visit(login_path)
+      fill_in(with: user.login_id, id: "session_login_id")
+      fill_in(with: user.password, id: "session_password")
+      click_button(I18n.t("helpers.submit.login"))
+    end
+
+    it "ユーザー詳細画面が表示される" do
+      visit(admin_user_path(user))
+
+      expect(page).to have_current_path(admin_user_path(user))
+    end
+  end
 end

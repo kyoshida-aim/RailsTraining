@@ -47,6 +47,8 @@ ja:
         register:
           success: "ユーザー「%{user}」を作成しました"
           failed: ユーザーの登録に失敗しました
+      show:
+        header: ユーザー詳細
   sessions:
     new:
       header: ログイン

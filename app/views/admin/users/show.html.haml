@@ -1,2 +1,21 @@
-%h1 Admin::Users#show
-%p Find me in app/views/admin/users/show.html.haml
+%h1= t(".header")
+
+.nav.justify-content-end
+  = link_to(t("helpers.list"), admin_users_path, class: "nav-link")
+%table.table.table-hover
+  %tbody
+    %tr
+      %th= User.human_attribute_name(:id)
+      %td= @user.id
+    %tr
+      %th= User.human_attribute_name(:login_id)
+      %td= @user.login_id
+    %tr
+      %th= User.human_attribute_name(:admin)
+      %td= @user.admin ? t("helpers.admin.true") : t("helpers.admin.false")
+    %tr
+      %th= User.human_attribute_name(:created_at)
+      %td= @user.created_at
+    %tr
+      %th= User.human_attribute_name(:updated_at)
+      %td= @user.updated_at
