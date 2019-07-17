@@ -12,6 +12,8 @@ ja:
           attributes:
             deadline:
               after: は現在時刻以降に設定してください
+        user:
+          only_alphameric: には英数字のみ使用できます
     models:
       task: タスク
       user: ユーザー

@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "ユーザー関連機能", type: :system do
   describe "ログイン" do
-    let!(:user) { FactoryBot.create(:user, login_id: "ユーザーA") }
+    let!(:user) { FactoryBot.create(:user, login_id: "UserA") }
 
     context "ユーザーIDとパスワードを正しく入力した場合" do
       it "ログインできる" do
@@ -18,8 +18,8 @@ describe "ユーザー関連機能", type: :system do
     context "存在しないユーザーでログインしようとした場合" do
       it "ログインできない" do
         visit(login_path)
-        fill_in(with: "不正なユーザー名", id: "session_login_id")
-        fill_in(with: "不正なパスワード", id: "session_password")
+        fill_in(with: "InvalidLoginId", id: "session_login_id")
+        fill_in(with: "InvalidPassword", id: "session_password")
         click_button(I18n.t("helpers.submit.login"))
 
         expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
@@ -63,7 +63,7 @@ describe "ユーザー関連機能", type: :system do
   end
 
   describe "ログアウト" do
-    let!(:user) { FactoryBot.create(:user, login_id: "ユーザーA") }
+    let!(:user) { FactoryBot.create(:user, login_id: "UserA") }
 
     before do
       visit(login_path)
@@ -81,10 +81,10 @@ describe "ユーザー関連機能", type: :system do
   end
 
   describe "ユーザー一覧画面" do
-    let!(:user) { FactoryBot.create(:user, login_id: "ユーザーA", admin: true) }
+    let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: true) }
 
     before do
-      FactoryBot.create(:user, login_id: "ユーザーB")
+      FactoryBot.create(:user, login_id: "UserB")
 
       visit(login_path)
       fill_in(with: user.login_id, id: "session_login_id")
@@ -98,8 +98,8 @@ describe "ユーザー関連機能", type: :system do
       # "user-id-{ユーザーのID}"のタグがついた要素を取得し、平文で保存する
       users = all(id: /\Auser-id-(?:\d+)\z/).map(&:text)
 
-      expect(users).to have_content("ユーザーA")
-      expect(users).to have_content("ユーザーB")
+      expect(users).to have_content("UserA")
+      expect(users).to have_content("UserB")
     end
 
     describe "ユーザー登録" do
@@ -112,9 +112,9 @@ describe "ユーザー関連機能", type: :system do
       end
 
       context "すでに存在するログインIDで登録しようとした場合" do
-        let(:login_id) { "ユーザーA" }
-        let(:password) { "適当なパスワード" }
-        let(:password_confirmation) { "適当なパスワード" }
+        let(:login_id) { "UserA" }
+        let(:password) { "SomePassword" }
+        let(:password_confirmation) { "SomePassword" }
 
         it "登録に失敗する" do
           within("#error_explanation") do
@@ -125,8 +125,8 @@ describe "ユーザー関連機能", type: :system do
 
       context "ログインIDを入力しなかった場合" do
         let(:login_id) { "" }
-        let(:password) { "適当なパスワード" }
-        let(:password_confirmation) { "適当なパスワード" }
+        let(:password) { "SomePassword" }
+        let(:password_confirmation) { "SomePassword" }
 
         it "登録に失敗する" do
           within("#error_explanation") do
@@ -136,7 +136,7 @@ describe "ユーザー関連機能", type: :system do
       end
 
       context "パスワードを入力しなかった場合" do
-        let(:login_id) { "適当なユーザー名" }
+        let(:login_id) { "SomeUser" }
         let(:password) { "" }
         let(:password_confirmation) { "" }
 
@@ -160,9 +160,9 @@ describe "ユーザー関連機能", type: :system do
       end
 
       context "パスワードとパスワード(確認)が一致しない場合" do
-        let(:login_id) { "適当なユーザー名" }
-        let(:password) { "適当なパスワード1" }
-        let(:password_confirmation) { "適当なパスワード2" }
+        let(:login_id) { "SomeUser" }
+        let(:password) { "SomePassword1" }
+        let(:password_confirmation) { "SomePassword2" }
 
         it "登録に失敗する" do
           within("#error_explanation") do
@@ -171,13 +171,26 @@ describe "ユーザー関連機能", type: :system do
         end
       end
 
+      context "ログインIDまたはパスワードに英数字以外が使用されてい場合" do
+        let(:login_id) { "適当なユーザー" }
+        let(:password) { "適当なパスワード" }
+        let(:password_confirmation) { "適当なパスワード" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("ログインIDには英数字のみ使用できます")
+            expect(page).to have_content("パスワードには英数字のみ使用できます")
+          end
+        end
+      end
+
       context "ログインIDとパスワードを正しく入力した場合" do
-        let(:login_id) { "新しいユーザー名" }
-        let(:password) { "新しいユーザーのパスワード" }
-        let(:password_confirmation) { "新しいユーザーのパスワード" }
+        let(:login_id) { "NewUser" }
+        let(:password) { "NewUserPassword" }
+        let(:password_confirmation) { "NewUserPassword" }
 
         it "登録に成功する" do
-          expect(page).to have_selector(".alert-success", text: "ユーザー「新しいユーザー名」を作成しました")
+          expect(page).to have_selector(".alert-success", text: "ユーザー「NewUser」を作成しました")
         end
       end
     end
@@ -201,7 +214,7 @@ describe "ユーザー関連機能", type: :system do
   end
 
   describe "ユーザー詳細画面" do
-    let!(:user) { FactoryBot.create(:user, login_id: "ユーザーA", admin: true) }
+    let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: true) }
 
     before do
       visit(login_path)
