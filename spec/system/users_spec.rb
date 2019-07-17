@@ -211,6 +211,18 @@ describe "ユーザー関連機能", type: :system do
         expect(editable).not_to have_content(User.human_attribute_name(:password_confirmation))
       end
     end
+
+    describe "削除機能" do
+      context "削除ボタンを押した時" do
+        it "削除できる" do
+          visit(admin_users_path)
+          click_on(I18n.t("helpers.delete.button"), class: "btn btn-danger user-id-#{user.id}")
+          page.driver.browser.switch_to.alert.accept
+
+          expect(page).to have_selector(".alert-success", text: "ユーザー「#{user.login_id}」を削除しました")
+        end
+      end
+    end
   end
 
   describe "ユーザー詳細画面" do
