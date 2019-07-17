@@ -9,3 +9,4 @@
     = f.password_field(:password , class: 'form-control', id: 'session_password')
   %br
   = f.submit(t('helpers.submit.login'), class: 'btn btn-primary')
+  = link_to(t('helpers.create.button'), user_new_path, class: 'btn btn-primary mr-3')

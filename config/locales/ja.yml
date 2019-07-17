@@ -59,6 +59,12 @@ ja:
       destroy:
         destroy:
           success: "ユーザー「%{user}」を削除しました"
+  user:
+    new:
+      header: ユーザー登録
+    create:
+      register:
+        success: 登録に成功しました
   sessions:
     new:
       header: ログイン

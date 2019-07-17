@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get "user/new"
+  post "user/new", to: "user#create"
   get "user/edit"
   namespace :admin do
     resources :users
