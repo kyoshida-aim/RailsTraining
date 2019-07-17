@@ -101,5 +101,85 @@ describe "ユーザー関連機能", type: :system do
       expect(users).to have_content("ユーザーA")
       expect(users).to have_content("ユーザーB")
     end
+
+    describe "ユーザー登録" do
+      before do
+        visit(new_admin_user_path)
+        fill_in(with: login_id, class: /\Aform-control input-login_id\z/)
+        fill_in(with: password, class: /\Aform-control input-password\z/)
+        fill_in(with: password_confirmation, class: /\Aform-control input-password_confirmation\z/)
+        click_button(I18n.t("helpers.submit.create"))
+      end
+
+      context "すでに存在するログインIDで登録しようとした場合" do
+        let(:login_id) { "ユーザーA" }
+        let(:password) { "適当なパスワード" }
+        let(:password_confirmation) { "適当なパスワード" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("ログインIDはすでに存在します")
+          end
+        end
+      end
+
+      context "ログインIDを入力しなかった場合" do
+        let(:login_id) { "" }
+        let(:password) { "適当なパスワード" }
+        let(:password_confirmation) { "適当なパスワード" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("ログインIDを入力してください")
+          end
+        end
+      end
+
+      context "パスワードを入力しなかった場合" do
+        let(:login_id) { "適当なユーザー名" }
+        let(:password) { "" }
+        let(:password_confirmation) { "" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("パスワードを入力してください")
+          end
+        end
+      end
+
+      context "パスワードが8文字以下の場合" do
+        let(:login_id) { "SomeUser" }
+        let(:password) { "smlpass" }
+        let(:password_confirmation) { "smlpass" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("パスワードは8文字以上で入力してください")
+          end
+        end
+      end
+
+      context "パスワードとパスワード(確認)が一致しない場合" do
+        let(:login_id) { "適当なユーザー名" }
+        let(:password) { "適当なパスワード1" }
+        let(:password_confirmation) { "適当なパスワード2" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("パスワード(確認)とパスワードの入力が一致しません")
+          end
+        end
+      end
+
+      context "ログインIDとパスワードを正しく入力した場合" do
+        let(:login_id) { "新しいユーザー名" }
+        let(:password) { "新しいユーザーのパスワード" }
+        let(:password_confirmation) { "新しいユーザーのパスワード" }
+
+        it "登録に成功する" do
+          expect(page).to have_selector(".alert-success", text: "ユーザー「新しいユーザー名」を作成しました")
+        end
+      end
+    end
   end
 end

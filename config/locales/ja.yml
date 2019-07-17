@@ -28,6 +28,8 @@ ja:
       user:
         login_id: ログインID
         password: パスワード
+        password_confirmation: パスワード(確認)
+        admin: 管理者権限
   admin:
     users:
       index:
@@ -39,6 +41,12 @@ ja:
         delete:
           button: 削除
           confirm: "ユーザー「%{user}」を削除します、よろしいですか？"
+      new:
+        header: ユーザー登録
+      create:
+        register:
+          success: "ユーザー「%{user}」を作成しました"
+          failed: ユーザーの登録に失敗しました
   sessions:
     new:
       header: ログイン

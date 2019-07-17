@@ -10,4 +10,19 @@ describe User, type: :model do
       end
     end
   end
+
+  describe "ログインIDのバリデーション" do
+    before do
+      FactoryBot.create(:user, login_id: "ユーザーA")
+    end
+
+    let!(:user) { FactoryBot.create(:user) }
+    it "既存のユーザーIDと重複するIDは登録できない" do
+      user.login_id = "ユーザーA"
+      expect(user.valid?).to eq(false)
+
+      user.login_id = "ユーザーB"
+      expect(user.valid?).to eq(true)
+    end
+  end
 end
