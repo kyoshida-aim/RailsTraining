@@ -41,14 +41,19 @@ ja:
         delete:
           button: 削除
           confirm: "ユーザー「%{user}」を削除します、よろしいですか？"
+      show:
+        header: ユーザー詳細
       new:
         header: ユーザー登録
       create:
         register:
           success: "ユーザー「%{user}」を作成しました"
           failed: ユーザーの登録に失敗しました
-      show:
-        header: ユーザー詳細
+      edit:
+        header: 編集
+      update:
+        update:
+          success: "ユーザー「%{user}」を更新しました"
   sessions:
     new:
       header: ログイン

@@ -181,6 +181,23 @@ describe "ユーザー関連機能", type: :system do
         end
       end
     end
+
+    describe "ユーザー編集" do
+      before do
+        visit(admin_users_path)
+        click_link(href: edit_admin_user_path(user))
+      end
+
+      it "管理者権限の有無のみが編集できる" do
+        # 入力フォームまたはチェックボックスを取得
+        editable = all(class: /\Aform-(?:\w+)/).collect(&:text)
+
+        expect(editable).not_to have_content(User.human_attribute_name(:login_id))
+        expect(editable).to have_content(User.human_attribute_name(:admin))
+        expect(editable).not_to have_content(User.human_attribute_name(:password))
+        expect(editable).not_to have_content(User.human_attribute_name(:password_confirmation))
+      end
+    end
   end
 
   describe "ユーザー詳細画面" do

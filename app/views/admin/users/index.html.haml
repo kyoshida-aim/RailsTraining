@@ -19,7 +19,6 @@
           %td= user.created_at
           %td= user.updated_at
           %td
-            -# 中身未実装
             = link_to(t(".edit.button"), edit_admin_user_path(user), class: 'btn btn-primary mr-3')
             -# 中身未実装
             = link_to(t(".delete.button"), method: :delete, data: { confirm: t(".delete.confirm", user: user.login_id)}, class: "btn btn-danger" )
