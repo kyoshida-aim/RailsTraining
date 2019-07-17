@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "user/new"
+  get "user/edit"
   namespace :admin do
     resources :users
   end
