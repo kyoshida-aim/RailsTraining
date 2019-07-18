@@ -5,7 +5,7 @@
     - @user.errors.full_messages.each do |message|
       %li= message
 
-= form_with(model: [:admin, @user], local: true) do |f|
+= form_with(model: [:admin, @user], url: admin_user_path(@user), local: true) do |f|
   = f.label(:login_id, "#{User.human_attribute_name(:login_id)}: #{@user.login_id}")
   .form-check
     = f.label(:admin, User.human_attribute_name(:admin)) do
