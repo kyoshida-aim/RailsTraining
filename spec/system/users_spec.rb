@@ -12,6 +12,7 @@ describe "ユーザー関連機能", type: :system do
         click_button(I18n.t("helpers.submit.login"))
 
         expect(page).to have_selector(".alert-success", text: "ログインしました")
+        expect(page).to have_current_path(root_path)
       end
     end
 
@@ -23,6 +24,7 @@ describe "ユーザー関連機能", type: :system do
         click_button(I18n.t("helpers.submit.login"))
 
         expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+        expect(page).to have_current_path(login_path)
       end
     end
 
@@ -40,6 +42,7 @@ describe "ユーザー関連機能", type: :system do
 
         it "ログインできない" do
           expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+          expect(page).to have_current_path(login_path)
         end
       end
 
@@ -49,6 +52,7 @@ describe "ユーザー関連機能", type: :system do
 
         it "ログインできない" do
           expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+          expect(page).to have_current_path(login_path)
         end
       end
     end
@@ -57,7 +61,7 @@ describe "ユーザー関連機能", type: :system do
       it "タスク一覧ページからログインページにリダイレクトされる" do
         visit(tasks_path)
 
-        expect(page).to have_current_path(%r{/login})
+        expect(page).to have_current_path(login_path)
       end
     end
   end
@@ -76,7 +80,7 @@ describe "ユーザー関連機能", type: :system do
       click_link(I18n.t("helpers.logout.name"))
 
       expect(page).to have_selector(".alert-success", text: "ログアウトしました")
-      expect(page).to have_current_path(%r{/login})
+      expect(page).to have_current_path(login_path)
     end
   end
 
@@ -215,6 +219,7 @@ describe "ユーザー関連機能", type: :system do
 
         it "登録に成功する" do
           expect(page).to have_selector(".alert-success", text: "ユーザー「NewUser」を作成しました")
+          expect(page).to have_current_path(admin_users_path)
         end
       end
     end
@@ -242,8 +247,10 @@ describe "ユーザー関連機能", type: :system do
           visit(admin_users_path)
           click_on(I18n.t("helpers.delete.button"), class: "btn btn-danger user-id-#{user.id}")
           page.driver.browser.switch_to.alert.accept
+          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
 
           expect(page).to have_selector(".alert-success", text: "ユーザー「#{user.login_id}」を削除しました")
+          expect(users).not_to include(user.login_id)
         end
       end
     end
