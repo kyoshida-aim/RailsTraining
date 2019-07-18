@@ -63,9 +63,9 @@ ja:
           success: "ユーザー「%{user}」を削除しました"
     tasks:
       index:
-        header: ユーザーのタスク一覧
+        header: "%{user}のタスク一覧"
       show:
-        header: ユーザーのタスク詳細
+        header: "%{user}のタスク詳細"
   sessions:
     new:
       header: ログイン
