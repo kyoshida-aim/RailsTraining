@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
-  get "user/new"
-  post "user/new", to: "user#create"
-  get "user/:id/edit", to: "user#edit", as: "user_edit"
-  patch "user/:id/edit", to: "user#update", as: "user_update"
+  resources :users, only: [:create, :new, :edit, :update]
   namespace :admin do
     resources :users
   end

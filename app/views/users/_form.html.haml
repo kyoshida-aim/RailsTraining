@@ -3,7 +3,7 @@
     - user.errors.full_messages.each do |message|
       %li= message
 
-= form_with(model: user, url: path, local: true) do |f|
+= form_with(model: user, local: true) do |f|
   .form-group
     = f.label(:login_id, User.human_attribute_name(:login_id))
     = f.text_field(:login_id, class: 'form-control input-login_id')
