@@ -8,6 +8,6 @@ class Admin::TasksController < ApplicationController
 
   def show
     @user = User.find(params[:user_id])
-    @task = @user.tasks.find(params[:task_id])
+    @task = @user.tasks.find(params[:id])
   end
 end
