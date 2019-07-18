@@ -61,6 +61,11 @@ ja:
       destroy:
         destroy:
           success: "ユーザー「%{user}」を削除しました"
+    tasks:
+      index:
+        header: ユーザーのタスク一覧
+      show:
+        header: ユーザーのタスク詳細
   sessions:
     new:
       header: ログイン

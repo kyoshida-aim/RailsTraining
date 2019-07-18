@@ -104,9 +104,9 @@ describe "ユーザー関連機能", type: :system do
 
     context "タスクが登録されている場合" do
       before do
-        FactoryBot.create(:task, user: user)
-        FactoryBot.create(:task, user: user)
-        FactoryBot.create(:task, user: user)
+        FactoryBot.create(:task, user: user, name: "タスクA")
+        FactoryBot.create(:task, user: user, name: "タスクB")
+        FactoryBot.create(:task, user: user, name: "タスクC")
       end
 
       it "タスク数が表示される" do
@@ -114,6 +114,23 @@ describe "ユーザー関連機能", type: :system do
         user_a_tasks = find_by_id(/\Anumber-of-tasks-#{user.id}/).text.to_i # rubocop:disable Rails/DynamicFindBy
 
         expect(user_a_tasks).to eq(3)
+      end
+
+      it "ユーザーのタスク一覧が確認できる" do
+        visit(admin_user_tasks_path(user.id))
+
+        tasks = all(id: /\Atask-name-(?:\d+)\z/).collect(&:text)
+        expect(tasks).to include("タスクA")
+        expect(tasks).to include("タスクB")
+        expect(tasks).to include("タスクC")
+      end
+
+      it "ユーザーのタスク詳細を確認できる" do
+        task = Task.find_by(name: "タスクA")
+        visit(admin_user_tasks_path(user.id))
+        click_on(id: "task-name-#{task.id}")
+
+        expect(page).to have_current_path(admin_user_task_path(user.id, task.id))
       end
     end
 
