@@ -147,6 +147,30 @@ describe "ユーザー関連機能", type: :system do
         end
       end
 
+      context "ログインIDが4文字より少ないの時" do
+        let(:login_id) { "A" }
+        let(:password) { "password" }
+        let(:password_confirmation) { "password" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("ログインIDは4文字以上で入力してください")
+          end
+        end
+      end
+
+      context "ログインIDが20文字より多い時" do
+        let(:login_id) { "ABCDEFGHIJKLMNOPQRSTU" }
+        let(:password) { "password" }
+        let(:password_confirmation) { "password" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("ログインIDは20文字以内で入力してください")
+          end
+        end
+      end
+
       context "パスワードが8文字以下の場合" do
         let(:login_id) { "SomeUser" }
         let(:password) { "smlpass" }
