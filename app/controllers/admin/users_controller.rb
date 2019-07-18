@@ -12,7 +12,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params_create)
+    @user = User.new(create_params)
 
     if @user.save
       redirect_to(admin_users_path, notice: t(".register.success", user: @user.login_id))
@@ -28,7 +28,7 @@ class Admin::UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
 
-    if @user.update(user_params_edit)
+    if @user.update(edit_params)
       redirect_to(admin_users_path, notice: t(".update.success", user: @user.login_id))
     else
       render(:edit)
@@ -43,11 +43,11 @@ class Admin::UsersController < ApplicationController
 
   private
 
-    def user_params_create
+    def create_params
       params.require(:user).permit(:login_id, :admin, :password, :password_confirmation)
     end
 
-    def user_params_edit
+    def edit_params
       params.require(:user).permit(:admin)
     end
 end
