@@ -102,6 +102,21 @@ describe "ユーザー関連機能", type: :system do
       expect(users).to have_content("UserB")
     end
 
+    context "タスクが登録されている場合" do
+      before do
+        FactoryBot.create(:task, user: user)
+        FactoryBot.create(:task, user: user)
+        FactoryBot.create(:task, user: user)
+      end
+
+      it "タスク数が表示される" do
+        visit(admin_users_path)
+        user_a_tasks = find_by_id(/\Anumber-of-tasks-#{user.id}/).text.to_i # rubocop:disable Rails/DynamicFindBy
+
+        expect(user_a_tasks).to eq(3)
+      end
+    end
+
     describe "ユーザー登録" do
       before do
         visit(new_admin_user_path)

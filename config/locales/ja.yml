@@ -43,6 +43,8 @@ ja:
         delete:
           button: 削除
           confirm: "ユーザー「%{user}」を削除します、よろしいですか？"
+        task:
+          size: タスク数
       show:
         header: ユーザー詳細
       new:

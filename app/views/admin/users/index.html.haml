@@ -10,6 +10,7 @@
       %th= User.human_attribute_name(:admin)
       %th= User.human_attribute_name(:created_at)
       %th= User.human_attribute_name(:updated_at)
+      %th= t(".task.size")
       %th
     %tbody
       - @users.each do |user|
@@ -18,6 +19,7 @@
           %td= user.admin? ? t("helpers.admin.true") : t("helpers.admin.false")
           %td= user.created_at
           %td= user.updated_at
+          = content_tag(:td, user.tasks.size, id: "number-of-tasks-#{user.id}")
           %td
             = link_to(t(".edit.button"), edit_admin_user_path(user), class: 'btn btn-primary mr-3')
             = link_to(t(".delete.button"), [:admin, user], method: :delete, data: { confirm: t(".delete.confirm", user: user.login_id)}, class: "btn btn-danger user-id-#{user.id}" )
