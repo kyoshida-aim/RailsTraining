@@ -16,11 +16,11 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = current_user
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = current_user
 
     if @user.update(user_params)
       redirect_to(tasks_path, notice: t("helpers.user.edit.notice"))
