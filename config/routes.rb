@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   get "user/new"
   post "user/new", to: "user#create"
-  get "user/edit"
+  get "user/:id/edit", to: "user#edit", as: "user_edit"
+  patch "user/:id/edit", to: "user#update", as: "user_update"
   namespace :admin do
     resources :users
   end

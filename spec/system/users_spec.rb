@@ -125,6 +125,61 @@ describe "ユーザー関連機能", type: :system do
     end
   end
 
+  describe "登録情報修正" do
+    let!(:user) { FactoryBot.create(:user, login_id: "UserA", password: "password") }
+    before do
+      # ログインして登録情報修正ページまで移動
+      visit(login_path)
+      fill_in(with: user.login_id, id: "session_login_id")
+      fill_in(with: user.password, id: "session_password")
+      click_button(I18n.t("helpers.submit.login"))
+      click_link(class: "nav-link user_edit")
+
+      # フォーム入力・更新
+      fill_in(with: login_id, class: "form-control input-login_id")
+      fill_in(with: password, class: "form-control input-password")
+      fill_in(with: password_confirmation, class: "form-control input-password_confirmation")
+      click_button(I18n.t("helpers.submit.update"))
+    end
+
+    context "フォームが入力されていない場合" do
+      let(:login_id) { "" }
+      let(:password) { "" }
+      let(:password_confirmation) { "" }
+
+      it "登録に失敗する" do
+        within("#error_explanation") do
+          expect(page).to have_content("ログインIDを入力してください")
+          expect(page).to have_content("パスワードを入力してください")
+        end
+      end
+    end
+
+    context "フォーム入力が不十分" do
+      let(:login_id) { "ユーザーA" }
+      let(:password) { "passwor" }
+      let(:password_confirmation) { "password" }
+
+      it "登録に失敗する" do
+        within("#error_explanation") do
+          expect(page).to have_content("ログインIDには英数字のみ使用できます")
+          expect(page).to have_content("パスワードは8文字以上で入力してください")
+          expect(page).to have_content("パスワード(確認)とパスワードの入力が一致しません")
+        end
+      end
+    end
+
+    context "ユーザー情報が正しく入力されている場合" do
+      let(:login_id) { "UserB" }
+      let(:password) { "password" }
+      let(:password_confirmation) { "password" }
+
+      it "正しく更新できる" do
+        expect(page).to have_selector(".alert-success", text: "ユーザー情報を更新しました")
+      end
+    end
+  end
+
   describe "ログアウト" do
     let!(:user) { FactoryBot.create(:user, login_id: "UserA") }
 
