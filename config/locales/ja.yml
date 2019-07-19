@@ -59,6 +59,14 @@ ja:
       destroy:
         destroy:
           success: "ユーザー「%{user}」を削除しました"
+  users:
+    new:
+      header: ユーザー登録
+    create:
+      register:
+        success: 登録に成功しました
+    edit:
+      header: ユーザー情報編集
   sessions:
     new:
       header: ログイン
@@ -217,6 +225,10 @@ ja:
     login:
       name: ログイン
       as: "%{login_id}でログイン中"
+    user:
+      edit:
+        link: ユーザー情報修正
+        notice: ユーザー情報を更新しました
     logout:
       name: ログアウト
     select:
