@@ -6,10 +6,7 @@ describe "ユーザー関連機能", type: :system do
 
     context "ユーザーIDとパスワードを正しく入力した場合" do
       it "ログインできる" do
-        visit(login_path)
-        fill_in(with: user.login_id, id: "session_login_id")
-        fill_in(with: user.password, id: "session_password")
-        click_button(I18n.t("helpers.submit.login"))
+        try_login(login_id: user.login_id, password: user.password)
 
         expect(page).to have_selector(".alert-success", text: "ログインしました")
         expect(page).to have_current_path(root_path)
@@ -18,10 +15,7 @@ describe "ユーザー関連機能", type: :system do
 
     context "存在しないユーザーでログインしようとした場合" do
       it "ログインできない" do
-        visit(login_path)
-        fill_in(with: "InvalidLoginId", id: "session_login_id")
-        fill_in(with: "InvalidPassword", id: "session_password")
-        click_button(I18n.t("helpers.submit.login"))
+        try_login(login_id: "InvalidLoginId", password: "InvalidPassword")
 
         expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
         expect(page).to have_current_path(login_path)
@@ -29,28 +23,19 @@ describe "ユーザー関連機能", type: :system do
     end
 
     describe "正しく入力しないユーザーをログインさせない" do
-      before do
-        visit(login_path)
-        fill_in(with: login_id, id: "session_login_id")
-        fill_in(with: password, id: "session_password")
-        click_button(I18n.t("helpers.submit.login"))
-      end
-
       context "ユーザーIDが入力されていない場合" do
-        let(:login_id) { "" }
-        let(:password) { user.password }
-
         it "ログインできない" do
+          try_login(login_id: "", password: user.password)
+
           expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
           expect(page).to have_current_path(login_path)
         end
       end
 
       context "パスワードが入力されていない場合" do
-        let(:login_id) { user.login_id }
-        let(:password) { "" }
-
         it "ログインできない" do
+          try_login(login_id: user.login_id, password: "")
+
           expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
           expect(page).to have_current_path(login_path)
         end
