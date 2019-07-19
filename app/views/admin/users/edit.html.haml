@@ -1,3 +1,11 @@
 %h1= t(".header")
 
-= render(partial: 'form', locals: { user: @user } )
+= render(partial: 'errors', locals: { user: @user } )
+
+= form_with(model: [:admin, @user], local: true) do |f|
+  = f.label(:login_id, "#{User.human_attribute_name(:login_id)}: #{@user.login_id}")
+  .form-check
+    = f.label(:admin, User.human_attribute_name(:admin)) do
+      = f.check_box(:admin, class: 'form-check-input input-admin')
+      = User.human_attribute_name(:admin)
+  = f.submit(nil, class: "btn btn-primary")
