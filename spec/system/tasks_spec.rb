@@ -4,10 +4,7 @@ describe "タスク管理機能", type: :system do
   let!(:user_a) { FactoryBot.create(:user, login_id: "UserA") }
 
   before do
-    visit(login_path)
-    fill_in(with: user_a.login_id, id: "session_login_id")
-    fill_in(with: user_a.password, id: "session_password")
-    click_button(I18n.t("helpers.submit.login"))
+    login_by(user_a)
   end
 
   describe "一覧表示機能" do
