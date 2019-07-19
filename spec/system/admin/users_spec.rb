@@ -152,7 +152,7 @@ describe "ユーザー管理機能", type: :system do
       end
     end
 
-    describe "ユーザー編集" do
+    describe "管理権限の編集" do
       it "管理者権限の有無のみが編集できる" do
         visit(admin_users_path)
         click_link(href: edit_admin_user_path(user))
@@ -179,6 +179,38 @@ describe "ユーザー管理機能", type: :system do
         user_admin = find_by_id(/\Auser-id-#{user.id}-admin\z/) # rubocop:disable Rails/DynamicFindBy
 
         expect(user_admin.text).to eq("あり")
+      end
+
+      context "他に管理者がいる場合" do
+        let!(:user_to_edit) { FactoryBot.create(:user, admin: true) }
+
+        it "管理権限を消せる" do
+          visit(edit_admin_user_path(user_to_edit))
+          checked = find(class: /input-admin/).checked?
+
+          expect(checked).to eq(true) # あり
+
+          uncheck(class: /input-admin/)
+          click_button(I18n.t("helpers.submit.update"))
+
+          user_admin = find_by_id(/\Auser-id-#{user_to_edit.id}-admin\z/) # rubocop:disable Rails/DynamicFindBy
+
+          expect(user_admin.text).to eq("なし")
+        end
+      end
+
+      context "他に管理者がいない場合" do
+        it "管理者権限を持つものがいなくなる編集を行えない" do
+          visit(edit_admin_user_path(user))
+          uncheck(class: /input-admin/)
+          click_button(I18n.t("helpers.submit.update"))
+
+          within("#error_explanation") do
+            expect(page).to have_content("管理者権限をもつユーザーは一人以上存在しなければなりません")
+          end
+
+          expect(user.admin).to eq(true)
+        end
       end
     end
 
