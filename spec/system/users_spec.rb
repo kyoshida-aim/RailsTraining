@@ -132,11 +132,7 @@ describe "ユーザー関連機能", type: :system do
   describe "登録情報修正" do
     let!(:user) { FactoryBot.create(:user, login_id: "UserA", password: "password") }
     before do
-      # ログインして登録情報修正ページまで移動
-      visit(login_path)
-      fill_in(with: user.login_id, id: "session_login_id")
-      fill_in(with: user.password, id: "session_password")
-      click_button(I18n.t("helpers.submit.login"))
+      login_by(user)
       click_link(class: "nav-link user_edit")
 
       # フォーム入力・更新
@@ -187,10 +183,7 @@ describe "ユーザー関連機能", type: :system do
     let!(:user) { FactoryBot.create(:user, login_id: "UserA") }
 
     before do
-      visit(login_path)
-      fill_in(with: user.login_id, id: "session_login_id")
-      fill_in(with: user.password, id: "session_password")
-      click_button(I18n.t("helpers.submit.login"))
+      login_by(user)
     end
 
     it "ログアウトし、ログインページに遷移される" do

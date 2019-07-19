@@ -7,10 +7,7 @@ describe "ユーザー管理機能", type: :system do
     before do
       FactoryBot.create(:user, login_id: "UserB")
 
-      visit(login_path)
-      fill_in(with: user.login_id, id: "session_login_id")
-      fill_in(with: user.password, id: "session_password")
-      click_button(I18n.t("helpers.submit.login"))
+      login_by(user)
     end
 
     it "一覧画面にユーザーが表示される" do
@@ -225,10 +222,7 @@ describe "ユーザー管理機能", type: :system do
     let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: true) }
 
     before do
-      visit(login_path)
-      fill_in(with: user.login_id, id: "session_login_id")
-      fill_in(with: user.password, id: "session_password")
-      click_button(I18n.t("helpers.submit.login"))
+      login_by(user)
     end
 
     it "ユーザー詳細画面が表示される" do
