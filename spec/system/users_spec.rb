@@ -218,11 +218,11 @@ describe "ユーザー関連機能", type: :system do
         let(:password_confirmation) { "NewUserPassword" }
 
         it "登録に成功する" do
-          user = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
+          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
 
           expect(page).to have_selector(".alert-success", text: "ユーザー「NewUser」を作成しました")
           expect(page).to have_current_path(admin_users_path)
-          expect(user).to include("NewUser")
+          expect(users).to include("NewUser")
         end
       end
     end
