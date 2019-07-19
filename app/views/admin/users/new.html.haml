@@ -1,22 +1,3 @@
 %h1=t(".header")
 
-- if @user.errors.present?
-  %ul#error_explanation
-    - @user.errors.full_messages.each do |message|
-      %li= message
-
-= form_with(model: [:admin, @user], local: true) do |f|
-  .form-group
-    = f.label(:login_id, User.human_attribute_name(:login_id))
-    = f.text_field(:login_id, class: 'form-control input-login_id')
-  .form-check
-    = f.label(:admin, User.human_attribute_name(:admin)) do
-      = f.check_box(:admin, class: 'form-check-input input-admin')
-      = User.human_attribute_name(:admin)
-  .form-group
-    = f.label(:password, User.human_attribute_name(:password))
-    = f.password_field(:password, class: 'form-control input-password')
-  .form-group
-    = f.label(:password_confirmation, User.human_attribute_name(:password_confirmation))
-    = f.password_field(:password_confirmation, class: 'form-control input-password_confirmation')
-  = f.submit(t("helpers.submit.create"), class: "btn btn-primary")
+= render(partial: 'form', locals: { user: @user, action_new: true } )
