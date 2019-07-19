@@ -110,25 +110,14 @@ describe "ユーザー管理機能", type: :system do
         end
       end
 
-      context "パスワードが8文字以下の場合" do
+      context "パスワードが正しく入力されていない場合" do
         let(:login_id) { "SomeUser" }
         let(:password) { "smlpass" }
-        let(:password_confirmation) { "smlpass" }
+        let(:password_confirmation) { "smallpass" }
 
         it "登録に失敗する" do
           within("#error_explanation") do
             expect(page).to have_content("パスワードは8文字以上で入力してください")
-          end
-        end
-      end
-
-      context "パスワードとパスワード(確認)が一致しない場合" do
-        let(:login_id) { "SomeUser" }
-        let(:password) { "SomePassword1" }
-        let(:password_confirmation) { "SomePassword2" }
-
-        it "登録に失敗する" do
-          within("#error_explanation") do
             expect(page).to have_content("パスワード(確認)とパスワードの入力が一致しません")
           end
         end
