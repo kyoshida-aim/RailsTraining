@@ -154,7 +154,6 @@ describe "ユーザー関連機能", type: :system do
       it "登録に失敗する" do
         within("#error_explanation") do
           expect(page).to have_content("ログインIDを入力してください")
-          expect(page).to have_content("パスワードを入力してください")
         end
       end
     end
