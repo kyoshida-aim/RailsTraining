@@ -9,6 +9,12 @@ describe "ユーザー管理機能", type: :system do
 
       expect(page).not_to have_link(href: admin_users_path)
     end
+
+    it "管理ページへのアクセスできない" do
+      login_by(user)
+      visit(admin_users_path)
+      expect(page).to have_content("The page you were looking for doesn't exist.")
+    end
   end
 
   describe "ユーザー一覧画面" do
