@@ -6,7 +6,7 @@ describe "ユーザー関連機能", type: :system do
 
     context "ユーザーIDとパスワードを正しく入力した場合" do
       it "ログインできる" do
-        try_login(login_id: user.login_id, password: user.password)
+        login(login_id: user.login_id, password: user.password)
 
         expect(page).to have_selector(".alert-success", text: "ログインしました")
         expect(page).to have_current_path(root_path)
@@ -15,7 +15,7 @@ describe "ユーザー関連機能", type: :system do
 
     context "存在しないユーザーでログインしようとした場合" do
       it "ログインできない" do
-        try_login(login_id: "InvalidLoginId", password: "InvalidPassword")
+        login(login_id: "InvalidLoginId", password: "InvalidPassword")
 
         expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
         expect(page).to have_current_path(login_path)
@@ -24,7 +24,7 @@ describe "ユーザー関連機能", type: :system do
 
     context "ユーザーIDが入力されていない場合" do
       it "ログインできない" do
-        try_login(login_id: "", password: user.password)
+        login(login_id: "", password: user.password)
 
         expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
         expect(page).to have_current_path(login_path)
@@ -33,7 +33,7 @@ describe "ユーザー関連機能", type: :system do
 
     context "パスワードが入力されていない場合" do
       it "ログインできない" do
-        try_login(login_id: user.login_id, password: "")
+        login(login_id: user.login_id, password: "")
 
         expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
         expect(page).to have_current_path(login_path)
