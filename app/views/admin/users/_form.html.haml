@@ -4,7 +4,7 @@
       %li= message
 
 = form_with(model: [:admin, user], local: true) do |f|
-  - if action_new
+  - if %w[new create].include?(action_name)
     .form-group
       = f.label(:login_id, User.human_attribute_name(:login_id))
       = f.text_field(:login_id, class: 'form-control input-login_id')
