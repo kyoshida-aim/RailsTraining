@@ -12,6 +12,7 @@ describe "ユーザー関連機能", type: :system do
         click_button(I18n.t("helpers.submit.login"))
 
         expect(page).to have_selector(".alert-success", text: "ログインしました")
+        expect(page).to have_current_path(root_path)
       end
     end
 
@@ -23,6 +24,7 @@ describe "ユーザー関連機能", type: :system do
         click_button(I18n.t("helpers.submit.login"))
 
         expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+        expect(page).to have_current_path(login_path)
       end
     end
 
@@ -40,6 +42,7 @@ describe "ユーザー関連機能", type: :system do
 
         it "ログインできない" do
           expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+          expect(page).to have_current_path(login_path)
         end
       end
 
@@ -49,6 +52,7 @@ describe "ユーザー関連機能", type: :system do
 
         it "ログインできない" do
           expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+          expect(page).to have_current_path(login_path)
         end
       end
     end
@@ -57,7 +61,7 @@ describe "ユーザー関連機能", type: :system do
       it "タスク一覧ページからログインページにリダイレクトされる" do
         visit(tasks_path)
 
-        expect(page).to have_current_path(%r{/login})
+        expect(page).to have_current_path(login_path)
       end
     end
   end
@@ -194,7 +198,7 @@ describe "ユーザー関連機能", type: :system do
       click_link(I18n.t("helpers.logout.name"))
 
       expect(page).to have_selector(".alert-success", text: "ログアウトしました")
-      expect(page).to have_current_path(%r{/login})
+      expect(page).to have_current_path(login_path)
     end
   end
 
@@ -218,6 +222,38 @@ describe "ユーザー関連機能", type: :system do
 
       expect(users).to have_content("UserA")
       expect(users).to have_content("UserB")
+    end
+
+    context "タスクが登録されている場合" do
+      before do
+        FactoryBot.create(:task, user: user, name: "タスクA")
+        FactoryBot.create(:task, user: user, name: "タスクB")
+        FactoryBot.create(:task, user: user, name: "タスクC")
+      end
+
+      it "タスク数が表示される" do
+        visit(admin_users_path)
+        user_a_tasks = find_by_id(/\Anumber-of-tasks-#{user.id}/).text.to_i # rubocop:disable Rails/DynamicFindBy
+
+        expect(user_a_tasks).to eq(3)
+      end
+
+      it "ユーザーのタスク一覧が確認できる" do
+        visit(admin_user_tasks_path(user.id))
+
+        tasks = all(id: /\Atask-name-(?:\d+)\z/).collect(&:text)
+        expect(tasks).to include("タスクA")
+        expect(tasks).to include("タスクB")
+        expect(tasks).to include("タスクC")
+      end
+
+      it "ユーザーのタスク詳細を確認できる" do
+        task = Task.find_by(name: "タスクA")
+        visit(admin_user_tasks_path(user.id))
+        click_on(id: "task-name-#{task.id}")
+
+        expect(page).to have_current_path(admin_user_task_path(user.id, task.id))
+      end
     end
 
     describe "ユーザー登録" do
@@ -265,6 +301,30 @@ describe "ユーザー関連機能", type: :system do
         end
       end
 
+      context "ログインIDが4文字より少ないの時" do
+        let(:login_id) { "A" }
+        let(:password) { "password" }
+        let(:password_confirmation) { "password" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("ログインIDは4文字以上で入力してください")
+          end
+        end
+      end
+
+      context "ログインIDが20文字より多い時" do
+        let(:login_id) { "ABCDEFGHIJKLMNOPQRSTU" }
+        let(:password) { "password" }
+        let(:password_confirmation) { "password" }
+
+        it "登録に失敗する" do
+          within("#error_explanation") do
+            expect(page).to have_content("ログインIDは20文字以内で入力してください")
+          end
+        end
+      end
+
       context "パスワードが8文字以下の場合" do
         let(:login_id) { "SomeUser" }
         let(:password) { "smlpass" }
@@ -308,7 +368,11 @@ describe "ユーザー関連機能", type: :system do
         let(:password_confirmation) { "NewUserPassword" }
 
         it "登録に成功する" do
+          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
+
           expect(page).to have_selector(".alert-success", text: "ユーザー「NewUser」を作成しました")
+          expect(page).to have_current_path(admin_users_path)
+          expect(users).to include("NewUser")
         end
       end
     end
@@ -336,8 +400,10 @@ describe "ユーザー関連機能", type: :system do
           visit(admin_users_path)
           click_on(I18n.t("helpers.delete.button"), class: "btn btn-danger user-id-#{user.id}")
           page.driver.browser.switch_to.alert.accept
+          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
 
           expect(page).to have_selector(".alert-success", text: "ユーザー「#{user.login_id}」を削除しました")
+          expect(users).not_to include(user.login_id)
         end
       end
     end
