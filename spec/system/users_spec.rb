@@ -22,23 +22,21 @@ describe "ユーザー関連機能", type: :system do
       end
     end
 
-    describe "正しく入力しないユーザーをログインさせない" do
-      context "ユーザーIDが入力されていない場合" do
-        it "ログインできない" do
-          try_login(login_id: "", password: user.password)
+    context "ユーザーIDが入力されていない場合" do
+      it "ログインできない" do
+        try_login(login_id: "", password: user.password)
 
-          expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
-          expect(page).to have_current_path(login_path)
-        end
+        expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+        expect(page).to have_current_path(login_path)
       end
+    end
 
-      context "パスワードが入力されていない場合" do
-        it "ログインできない" do
-          try_login(login_id: user.login_id, password: "")
+    context "パスワードが入力されていない場合" do
+      it "ログインできない" do
+        try_login(login_id: user.login_id, password: "")
 
-          expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
-          expect(page).to have_current_path(login_path)
-        end
+        expect(page).to have_selector(".alert-warning", text: "ログインに失敗しました")
+        expect(page).to have_current_path(login_path)
       end
     end
 
