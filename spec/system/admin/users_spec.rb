@@ -53,20 +53,11 @@ describe "ユーザー管理機能", type: :system do
     end
 
     describe "ユーザー登録" do
-      before do
-        visit(new_admin_user_path)
-        fill_in(with: login_id, class: /\Aform-control input-login_id\z/)
-        fill_in(with: password, class: /\Aform-control input-password\z/)
-        fill_in(with: password_confirmation, class: /\Aform-control input-password_confirmation\z/)
-        click_button(I18n.t("helpers.submit.create"))
-      end
-
       context "すでに存在するログインIDで登録しようとした場合" do
-        let(:login_id) { "UserA" }
-        let(:password) { "SomePassword" }
-        let(:password_confirmation) { "SomePassword" }
-
         it "登録に失敗する" do
+          visit(new_admin_user_path)
+          register_user(login_id: "UserA", password: "SomePassword", password_confirmation: "SomePassword")
+
           within("#error_explanation") do
             expect(page).to have_content("ログインIDはすでに存在します")
           end
@@ -74,11 +65,10 @@ describe "ユーザー管理機能", type: :system do
       end
 
       context "フォームを入力しなかった場合" do
-        let(:login_id) { "" }
-        let(:password) { "" }
-        let(:password_confirmation) { "" }
-
         it "登録に失敗する" do
+          visit(new_admin_user_path)
+          register_user(login_id: "", password: "", password_confirmation: "")
+
           within("#error_explanation") do
             expect(page).to have_content("ログインIDを入力してください")
             expect(page).to have_content("パスワードを入力してください")
@@ -87,11 +77,10 @@ describe "ユーザー管理機能", type: :system do
       end
 
       context "ログインIDが4文字より少ないの時" do
-        let(:login_id) { "A" }
-        let(:password) { "password" }
-        let(:password_confirmation) { "password" }
-
         it "登録に失敗する" do
+          visit(new_admin_user_path)
+          register_user(login_id: "A", password: "password", password_confirmation: "password")
+
           within("#error_explanation") do
             expect(page).to have_content("ログインIDは4文字以上で入力してください")
           end
@@ -99,11 +88,10 @@ describe "ユーザー管理機能", type: :system do
       end
 
       context "ログインIDが20文字より多い時" do
-        let(:login_id) { "ABCDEFGHIJKLMNOPQRSTU" }
-        let(:password) { "password" }
-        let(:password_confirmation) { "password" }
-
         it "登録に失敗する" do
+          visit(new_admin_user_path)
+          register_user(login_id: "ABCDEFGHIJKLMNOPQRSTU", password: "password", password_confirmation: "password")
+
           within("#error_explanation") do
             expect(page).to have_content("ログインIDは20文字以内で入力してください")
           end
@@ -111,11 +99,10 @@ describe "ユーザー管理機能", type: :system do
       end
 
       context "パスワードが正しく入力されていない場合" do
-        let(:login_id) { "SomeUser" }
-        let(:password) { "smlpass" }
-        let(:password_confirmation) { "smallpass" }
-
         it "登録に失敗する" do
+          visit(new_admin_user_path)
+          register_user(login_id: "SomeUser", password: "smlpass", password_confirmation: "smallpass")
+
           within("#error_explanation") do
             expect(page).to have_content("パスワードは8文字以上で入力してください")
             expect(page).to have_content("パスワード(確認)とパスワードの入力が一致しません")
@@ -124,11 +111,10 @@ describe "ユーザー管理機能", type: :system do
       end
 
       context "ログインIDまたはパスワードに英数字以外が使用されてい場合" do
-        let(:login_id) { "適当なユーザー" }
-        let(:password) { "適当なパスワード" }
-        let(:password_confirmation) { "適当なパスワード" }
-
         it "登録に失敗する" do
+          visit(new_admin_user_path)
+          register_user(login_id: "適当なユーザー", password: "適当なパスワード", password_confirmation: "適当なパスワード")
+
           within("#error_explanation") do
             expect(page).to have_content("ログインIDには英数字のみ使用できます")
             expect(page).to have_content("パスワードには英数字のみ使用できます")
@@ -137,11 +123,10 @@ describe "ユーザー管理機能", type: :system do
       end
 
       context "ログインIDとパスワードを正しく入力した場合" do
-        let(:login_id) { "NewUser" }
-        let(:password) { "NewUserPassword" }
-        let(:password_confirmation) { "NewUserPassword" }
-
         it "登録に成功する" do
+          visit(new_admin_user_path)
+          register_user(login_id: "NewUser", password: "NewUserPassword", password_confirmation: "NewUserPassword")
+
           users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
 
           expect(page).to have_selector(".alert-success", text: "ユーザー「NewUser」を作成しました")

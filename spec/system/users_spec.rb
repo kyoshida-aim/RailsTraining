@@ -55,19 +55,12 @@ describe "ユーザー関連機能", type: :system do
 
       visit(login_path)
       click_link(I18n.t("helpers.create.button"))
-
-      fill_in(with: login_id, class: "form-control input-login_id")
-      fill_in(with: password, class: "form-control input-password")
-      fill_in(with: password_confirmation, class: "form-control input-password_confirmation")
-      click_button(I18n.t("helpers.submit.create"))
     end
 
     context "すでに存在するユーザーと同じログインIDで登録しようとした場合" do
-      let(:login_id) { "UserA" }
-      let(:password) { "password" }
-      let(:password_confirmation) { "password" }
-
       it "登録に失敗する" do
+        register_user(login_id: "UserA", password: "password", password_confirmation: "password")
+
         within("#error_explanation") do
           expect(page).to have_content("ログインIDはすでに存在します")
         end
@@ -75,11 +68,9 @@ describe "ユーザー関連機能", type: :system do
     end
 
     context "フォームが入力されていない" do
-      let(:login_id) { "" }
-      let(:password) { "" }
-      let(:password_confirmation) { "" }
-
       it "登録に失敗する" do
+        register_user(login_id: "", password: "", password_confirmation: "")
+
         within("#error_explanation") do
           expect(page).to have_content("ログインIDを入力してください")
           expect(page).to have_content("パスワードを入力してください")
@@ -88,11 +79,8 @@ describe "ユーザー関連機能", type: :system do
     end
 
     context "フォーム入力が不十分" do
-      let(:login_id) { "ユーザーA" }
-      let(:password) { "passwor" }
-      let(:password_confirmation) { "password" }
-
       it "登録に失敗する" do
+        register_user(login_id: "ユーザーA", password: "passwor", password_confirmation: "password")
         within("#error_explanation") do
           expect(page).to have_content("ログインIDには英数字のみ使用できます")
           expect(page).to have_content("パスワードは8文字以上で入力してください")
@@ -102,11 +90,9 @@ describe "ユーザー関連機能", type: :system do
     end
 
     context "新規ユーザー情報が正しく入力されている場合" do
-      let(:login_id) { "UserB" }
-      let(:password) { "password" }
-      let(:password_confirmation) { "password" }
-
       it "新規登録できる" do
+        register_user(login_id: "UserB", password: "password", password_confirmation: "password")
+
         expect(page).to have_selector(".alert-success", text: "登録に成功しました")
       end
     end
@@ -117,20 +103,12 @@ describe "ユーザー関連機能", type: :system do
     before do
       login_by(user)
       click_link(class: "nav-link user_edit")
-
-      # フォーム入力・更新
-      fill_in(with: login_id, class: "form-control input-login_id")
-      fill_in(with: password, class: "form-control input-password")
-      fill_in(with: password_confirmation, class: "form-control input-password_confirmation")
-      click_button(I18n.t("helpers.submit.update"))
     end
 
     context "フォームが入力されていない場合" do
-      let(:login_id) { "" }
-      let(:password) { "" }
-      let(:password_confirmation) { "" }
-
       it "登録に失敗する" do
+        update_user(login_id: "", password: "", password_confirmation: "")
+
         within("#error_explanation") do
           expect(page).to have_content("ログインIDを入力してください")
         end
@@ -138,11 +116,9 @@ describe "ユーザー関連機能", type: :system do
     end
 
     context "フォーム入力が不十分" do
-      let(:login_id) { "ユーザーA" }
-      let(:password) { "passwor" }
-      let(:password_confirmation) { "password" }
-
       it "登録に失敗する" do
+        update_user(login_id: "ユーザーA", password: "passwor", password_confirmation: "password")
+
         within("#error_explanation") do
           expect(page).to have_content("ログインIDには英数字のみ使用できます")
           expect(page).to have_content("パスワードは8文字以上で入力してください")
@@ -152,11 +128,9 @@ describe "ユーザー関連機能", type: :system do
     end
 
     context "ユーザー情報が正しく入力されている場合" do
-      let(:login_id) { "UserB" }
-      let(:password) { "password" }
-      let(:password_confirmation) { "password" }
-
       it "正しく更新できる" do
+        update_user(login_id: "UserB", password: "password", password_confirmation: "password")
+
         expect(page).to have_selector(".alert-success", text: "ユーザー情報を更新しました")
       end
     end
