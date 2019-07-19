@@ -43,6 +43,8 @@ ja:
         delete:
           button: 削除
           confirm: "ユーザー「%{user}」を削除します、よろしいですか？"
+        task:
+          size: タスク数
       show:
         header: ユーザー詳細
       new:
@@ -59,6 +61,11 @@ ja:
       destroy:
         destroy:
           success: "ユーザー「%{user}」を削除しました"
+    tasks:
+      index:
+        header: "%{user}のタスク一覧"
+      show:
+        header: "%{user}のタスク詳細"
   sessions:
     new:
       header: ログイン
