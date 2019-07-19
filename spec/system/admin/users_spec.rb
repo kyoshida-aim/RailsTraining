@@ -5,12 +5,12 @@ describe "ユーザー管理機能", type: :system do
     let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: true) }
 
     before do
-      FactoryBot.create(:user, login_id: "UserB")
-
       login_by(user)
     end
 
     it "一覧画面にユーザーが表示される" do
+      FactoryBot.create(:user, login_id: "UserB")
+
       visit(admin_users_path)
 
       # "user-id-{ユーザーのID}"のタグがついた要素を取得し、平文で保存する
