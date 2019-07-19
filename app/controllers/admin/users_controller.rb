@@ -1,4 +1,6 @@
 class Admin::UsersController < AdminController
+  rescue_from Exceptions::UnableToDestroyLastAdmin, with: :unable_to_destroy
+
   def index
     @users = User.all.includes(:tasks)
   end
@@ -49,5 +51,11 @@ class Admin::UsersController < AdminController
 
     def edit_params
       params.require(:user).permit(:admin)
+    end
+
+    def unable_to_destroy(e = nil)
+      logger.debug e.logger_message if e
+      flash[:warning] = t(".destroy.failed")
+      redirect_to(admin_users_url)
     end
 end

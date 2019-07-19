@@ -61,6 +61,7 @@ ja:
       destroy:
         destroy:
           success: "ユーザー「%{user}」を削除しました"
+          failed: ユーザーの削除に失敗しました
     tasks:
       index:
         header: "%{user}のタスク一覧"
