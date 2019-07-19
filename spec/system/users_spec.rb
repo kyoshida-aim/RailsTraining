@@ -378,12 +378,10 @@ describe "ユーザー関連機能", type: :system do
     end
 
     describe "ユーザー編集" do
-      before do
+      it "管理者権限の有無のみが編集できる" do
         visit(admin_users_path)
         click_link(href: edit_admin_user_path(user))
-      end
 
-      it "管理者権限の有無のみが編集できる" do
         # 入力フォームまたはチェックボックスを取得
         editable = all(class: /\Aform-(?:\w+)/).collect(&:text)
 
@@ -391,6 +389,21 @@ describe "ユーザー関連機能", type: :system do
         expect(editable).to have_content(User.human_attribute_name(:admin))
         expect(editable).not_to have_content(User.human_attribute_name(:password))
         expect(editable).not_to have_content(User.human_attribute_name(:password_confirmation))
+      end
+
+      it "管理者権限を無しからありに変更" do
+        user_b = FactoryBot.create(:user, login_id: "NotAdminUser", admin: false)
+        visit(edit_admin_user_path(user_b))
+        checked = find(class: /\Aform-check-input input-admin\z/).checked?
+
+        expect(checked).to eq(false) # なし
+
+        check(class: /\Aform-check-input input-admin\z/)
+        click_button(I18n.t("helpers.submit.update"))
+
+        user_admin = find_by_id(/\Auser-id-#{user_b.id}-admin\z/) # rubocop:disable Rails/DynamicFindBy
+
+        expect(user_admin.text).to eq("あり")
       end
     end
 

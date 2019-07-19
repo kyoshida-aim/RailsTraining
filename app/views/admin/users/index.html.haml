@@ -16,7 +16,7 @@
       - @users.each do |user|
         %tr
           %td= link_to(user.login_id, [:admin, user], id: "user-id-#{user.id}")
-          %td= user.admin? ? t("helpers.admin.true") : t("helpers.admin.false")
+          %td{id: "user-id-#{user.id}-admin"}= user.admin? ? t("helpers.admin.true") : t("helpers.admin.false")
           %td= user.created_at
           %td= user.updated_at
           %td= link_to(user.tasks.size, admin_user_tasks_path(user.id), id: "number-of-tasks-#{user.id}")
