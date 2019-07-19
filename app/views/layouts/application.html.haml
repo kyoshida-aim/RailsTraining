@@ -15,7 +15,8 @@
         - if current_user
           %li.navbar-text= t("helpers.login.as", login_id: current_user.login_id)
           %li.nav-item= link_to(Task.model_name.human + t("helpers.list"), tasks_path, class: 'nav-link')
-          %li.nav-item= link_to(User.model_name.human + t("helpers.list"), admin_users_path, class: "nav-link")
+          - if current_user.admin?
+            %li.nav-item= link_to(User.model_name.human + t("helpers.list"), admin_users_path, class: "nav-link")
           %li.nav-item= link_to(t("helpers.user.edit.link"), edit_user_path(current_user.id), class: "nav-link user_edit")
           %li.nav-item= link_to(t("helpers.logout.name"), logout_path, method: :delete, class: "nav-link")
         - else

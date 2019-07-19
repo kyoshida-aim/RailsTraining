@@ -1,6 +1,16 @@
 require "rails_helper"
 
 describe "ユーザー管理機能", type: :system do
+  context "管理権限を持たない場合" do
+    let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: false) }
+
+    it "管理ページへのリンクが表示されない" do
+      login_by(user)
+
+      expect(page).not_to have_link(href: admin_users_path)
+    end
+  end
+
   describe "ユーザー一覧画面" do
     let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: true) }
 
