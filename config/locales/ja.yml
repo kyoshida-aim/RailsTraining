@@ -12,6 +12,8 @@ ja:
           attributes:
             deadline:
               after: は現在時刻以降に設定してください
+        user:
+          only_alphameric: には英数字のみ使用できます
     models:
       task: タスク
       user: ユーザー
@@ -28,6 +30,35 @@ ja:
       user:
         login_id: ログインID
         password: パスワード
+        password_confirmation: パスワード(確認)
+        admin: 管理者権限
+  admin:
+    users:
+      index:
+        header: ユーザー一覧
+        create:
+          button: 登録
+        edit:
+          button: 編集
+        delete:
+          button: 削除
+          confirm: "ユーザー「%{user}」を削除します、よろしいですか？"
+      show:
+        header: ユーザー詳細
+      new:
+        header: ユーザー登録
+      create:
+        register:
+          success: "ユーザー「%{user}」を作成しました"
+          failed: ユーザーの登録に失敗しました
+      edit:
+        header: 編集
+      update:
+        update:
+          success: "ユーザー「%{user}」を更新しました"
+      destroy:
+        destroy:
+          success: "ユーザー「%{user}」を削除しました"
   sessions:
     new:
       header: ログイン
@@ -180,6 +211,9 @@ ja:
         one: "%{model}にエラーが発生しました"
         other: "%{model}に%{count}個のエラーが発生しました"
   helpers:
+    admin:
+      true: あり
+      false: なし
     login:
       name: ログイン
       as: "%{login_id}でログイン中"

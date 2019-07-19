@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "タスク管理機能", type: :system do
-  let!(:user_a) { FactoryBot.create(:user, login_id: "ユーザーA") }
+  let!(:user_a) { FactoryBot.create(:user, login_id: "UserA") }
 
   before do
     visit(login_path)

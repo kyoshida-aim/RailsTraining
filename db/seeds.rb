@@ -9,4 +9,5 @@
 User.find_or_create_by!(login_id: "admin") do |user|
   user.password = Rails.application.credentials.admin_user[:password]
   user.password_confirmation = Rails.application.credentials.admin_user[:password]
+  user.admin = true
 end
