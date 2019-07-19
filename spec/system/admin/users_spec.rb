@@ -197,7 +197,7 @@ describe "ユーザー管理機能", type: :system do
   end
 
   describe "ユーザー詳細画面" do
-    let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: true) }
+    let!(:user) { FactoryBot.create(:user) }
 
     before do
       login_by(user)
