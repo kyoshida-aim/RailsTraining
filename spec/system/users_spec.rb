@@ -391,16 +391,16 @@ describe "ユーザー関連機能", type: :system do
       end
 
       it "管理者権限を無しからありに変更" do
-        user_b = FactoryBot.create(:user, login_id: "NotAdminUser", admin: false)
-        visit(edit_admin_user_path(user_b))
-        checked = find(class: /\Aform-check-input input-admin\z/).checked?
+        user = FactoryBot.create(:user, admin: false)
+        visit(edit_admin_user_path(user))
+        checked = find(class: /input-admin/).checked?
 
         expect(checked).to eq(false) # なし
 
-        check(class: /\Aform-check-input input-admin\z/)
+        check(class: /input-admin/)
         click_button(I18n.t("helpers.submit.update"))
 
-        user_admin = find_by_id(/\Auser-id-#{user_b.id}-admin\z/) # rubocop:disable Rails/DynamicFindBy
+        user_admin = find_by_id(/\Auser-id-#{user.id}-admin\z/) # rubocop:disable Rails/DynamicFindBy
 
         expect(user_admin.text).to eq("あり")
       end
