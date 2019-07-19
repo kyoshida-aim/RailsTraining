@@ -73,25 +73,14 @@ describe "ユーザー管理機能", type: :system do
         end
       end
 
-      context "ログインIDを入力しなかった場合" do
+      context "フォームを入力しなかった場合" do
         let(:login_id) { "" }
-        let(:password) { "SomePassword" }
-        let(:password_confirmation) { "SomePassword" }
-
-        it "登録に失敗する" do
-          within("#error_explanation") do
-            expect(page).to have_content("ログインIDを入力してください")
-          end
-        end
-      end
-
-      context "パスワードを入力しなかった場合" do
-        let(:login_id) { "SomeUser" }
         let(:password) { "" }
         let(:password_confirmation) { "" }
 
         it "登録に失敗する" do
           within("#error_explanation") do
+            expect(page).to have_content("ログインIDを入力してください")
             expect(page).to have_content("パスワードを入力してください")
           end
         end
