@@ -1,5 +1,13 @@
 require "rails_helper"
 
-RSpec.describe Label, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Label, type: :model do
+  describe "名前のバリデーション" do
+    it "空の名前は登録できない" do
+      label = FactoryBot.create(:label)
+      expect(label.valid?).to eq(true)
+
+      label.name = ""
+      expect(label.valid?).to eq(false)
+    end
+  end
 end
