@@ -32,7 +32,7 @@ class Admin::UsersController < AdminController
 
     if @user.update(edit_params)
       lost_admin = (@user.id == current_user.id && !@user.admin?)
-      redirect_path = lost_admin ? tasks_path : admin_users_path
+      redirect_path = lost_admin ? root_path : admin_users_path
       redirect_to(redirect_path, notice: t(".update.success", user: @user.login_id))
     else
       render(:edit)
