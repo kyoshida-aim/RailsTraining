@@ -17,6 +17,16 @@ class LabelsController < ApplicationController
   end
 
   def edit
+    @label = current_user.labels.find(params[:id])
+  end
+
+  def update
+    @label = current_user.labels.find(params[:id])
+    if @label.update(label_params)
+      redirect_to(labels_path, notice: t(".notice", name: @label.name))
+    else
+      render(:edit)
+    end
   end
 
   private

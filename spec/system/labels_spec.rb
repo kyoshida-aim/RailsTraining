@@ -1,13 +1,13 @@
 require "rails_helper"
 
 describe "ラベル機能", type: :system do
+  let!(:user) { FactoryBot.create(:user) }
+
+  before do
+    login_by(user)
+  end
+
   describe "ラベル一覧ページ" do
-    let!(:user) { FactoryBot.create(:user) }
-
-    before do
-      login_by(user)
-    end
-
     it "ユーザーのラベルが全て表示される" do
       label1 = FactoryBot.create(:label, name: "ユーザーAのラベル1", user: user)
       label2 = FactoryBot.create(:label, name: "ユーザーAのラベル2", user: user)
@@ -22,12 +22,6 @@ describe "ラベル機能", type: :system do
   end
 
   describe "ラベル新規登録" do
-    let!(:user) { FactoryBot.create(:user) }
-
-    before do
-      login_by(user)
-    end
-
     it "アプリから新規ラベルの作成ができる" do
       visit(new_label_path)
 
@@ -39,6 +33,21 @@ describe "ラベル機能", type: :system do
       labels = all(id: /\Alabel-name-(?:\d+)\z/).collect(&:text)
       expect(labels).to include("適当なラベル名")
       expect(labels).not_to include("")
+    end
+  end
+
+  describe "ラベル編集" do
+    it "アプリからラベルの編集ができる" do
+      label = FactoryBot.create(:label, user: user)
+      visit(labels_path)
+      click_link(href: edit_label_path(label))
+      update_label(name: "")
+      within("#error_explanation") { expect(page).to have_content("ラベル名を入力してください") }
+
+      update_label(name: "適当なラベル名")
+
+      labels = all(id: /\Alabel-name-(?:\d+)\z/).collect(&:text)
+      expect(labels).to include("適当なラベル名")
     end
   end
 end
