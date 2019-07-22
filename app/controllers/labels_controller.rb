@@ -3,9 +3,6 @@ class LabelsController < ApplicationController
     @labels = current_user.labels
   end
 
-  def show
-  end
-
   def new
     @label = Label.new
   end

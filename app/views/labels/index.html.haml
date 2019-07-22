@@ -13,7 +13,7 @@
     %tbody
       - @labels.each do |label|
         %tr
-          %td= link_to(label.name, label, id: "label-name-#{label.id}")
+          %td{id: "label-name-#{label.id}"}= label.name
           %td= label.created_at
           %td= label.updated_at
           %td
