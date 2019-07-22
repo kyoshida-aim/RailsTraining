@@ -9,7 +9,7 @@ class AdminController < ApplicationController
   end
 
   def render_not_found(e = nil)
-    logger.debug e.logger_message if e
+    logger.debug e.inspect if e
     render(file: Rails.root.join("public/404.html"), status: 404, layout: false)
   end
 end

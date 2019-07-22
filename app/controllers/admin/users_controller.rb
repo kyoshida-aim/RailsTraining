@@ -56,7 +56,7 @@ class Admin::UsersController < AdminController
     end
 
     def unable_to_destroy(e = nil)
-      logger.debug e.logger_message if e
+      logger.debug e.inspect if e
       flash[:warning] = t(".destroy.failed")
       redirect_to(admin_users_url)
     end
