@@ -37,4 +37,15 @@ describe User, type: :model do
       expect(error_detail).to eq(:need_admin)
     end
   end
+
+  describe "削除のバリデーション" do
+    it "管理者が他にいなくなる削除を行えない" do
+      admin_user = FactoryBot.create(:user, admin: true)
+
+      expect(admin_user.valid?).to eq(true)
+      expect(User.where(admin: true).size).to eq(1)
+
+      expect { admin_user.destroy }.to raise_error(Exceptions::UnableToDestroyLastAdmin)
+    end
+  end
 end

@@ -181,50 +181,6 @@ describe "ユーザー管理機能", type: :system do
         expect(user_admin.text).to eq("あり")
       end
     end
-
-    describe "削除機能" do
-      context "管理者が他にいる場合" do
-        let!(:user_to_delete) { FactoryBot.create(:user, admin: true) }
-
-        it "削除できる" do
-          visit(admin_users_path)
-          click_on(I18n.t("helpers.delete.button"), class: "btn btn-danger user-id-#{user_to_delete.id}")
-          page.driver.browser.switch_to.alert.accept
-          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
-
-          expect(page).to have_selector(".alert-success", text: "ユーザー「#{user_to_delete.login_id}」を削除しました")
-          expect(users).not_to include(user_to_delete.login_id)
-        end
-      end
-
-      context "削除対象が管理者でない場合" do
-        let!(:user_to_delete) { FactoryBot.create(:user, admin: false) }
-
-        it "削除できる" do
-          visit(admin_users_path)
-          click_on(I18n.t("helpers.delete.button"), class: "btn btn-danger user-id-#{user_to_delete.id}")
-          page.driver.browser.switch_to.alert.accept
-          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
-
-          expect(page).to have_selector(".alert-success", text: "ユーザー「#{user_to_delete.login_id}」を削除しました")
-          expect(users).not_to include(user_to_delete.login_id)
-        end
-      end
-
-      context "削除対象が唯一の管理者である場合" do
-        let!(:user_to_delete) { user }
-
-        it "削除できない" do
-          visit(admin_users_path)
-          click_on(I18n.t("helpers.delete.button"), class: "btn btn-danger user-id-#{user_to_delete.id}")
-          page.driver.browser.switch_to.alert.accept
-          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
-
-          expect(page).to have_selector(".alert-warning", text: "ユーザーの削除に失敗しました")
-          expect(users).to include(user_to_delete.login_id)
-        end
-      end
-    end
   end
 
   describe "ユーザー詳細画面" do
