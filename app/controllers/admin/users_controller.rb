@@ -31,7 +31,9 @@ class Admin::UsersController < AdminController
     @user = User.find(params[:id])
 
     if @user.update(edit_params)
-      redirect_to(admin_users_path, notice: t(".update.success", user: @user.login_id))
+      lost_admin = (@user.id == current_user.id && !@user.admin?)
+      redirect_path = lost_admin ? tasks_path : admin_users_path
+      redirect_to(redirect_path, notice: t(".update.success", user: @user.login_id))
     else
       render(:edit)
     end

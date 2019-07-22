@@ -185,6 +185,7 @@ describe "ユーザー管理機能", type: :system do
         let!(:user_to_edit) { FactoryBot.create(:user, admin: true) }
 
         it "管理権限を消せる" do
+          login_by(user_to_edit)
           visit(edit_admin_user_path(user_to_edit))
           checked = find(class: /input-admin/).checked?
 
@@ -193,9 +194,8 @@ describe "ユーザー管理機能", type: :system do
           uncheck(class: /input-admin/)
           click_button(I18n.t("helpers.submit.update"))
 
-          user_admin = find_by_id(/\Auser-id-#{user_to_edit.id}-admin\z/) # rubocop:disable Rails/DynamicFindBy
-
-          expect(user_admin.text).to eq("なし")
+          expect(page).to have_current_path(tasks_path)
+          expect(page).not_to have_link(admin_users_path)
         end
       end
 
