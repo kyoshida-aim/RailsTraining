@@ -80,6 +80,10 @@ ja:
   labels:
     index:
       header: ラベル一覧
+    new:
+      header: 新規ラベル作成
+    create:
+      notice: "ラベル「%{name}」を作成しました"
   sessions:
     new:
       header: ログイン
