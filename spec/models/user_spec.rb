@@ -23,4 +23,18 @@ describe User, type: :model do
       expect(user.valid?).to eq(true)
     end
   end
+
+  describe "更新のバリデーション" do
+    it "管理者が他にいなくなる編集を行えない" do
+      admin_user = FactoryBot.create(:user, admin: true)
+
+      expect(admin_user.valid?).to eq(true)
+      expect(User.where(admin: true).size).to eq(1)
+
+      admin_user.admin = false
+      expect(admin_user.valid?).to eq(false)
+      error_detail = admin_user.errors.details[:admin].first[:error]
+      expect(error_detail).to eq(:need_admin)
+    end
+  end
 end

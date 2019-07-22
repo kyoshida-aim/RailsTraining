@@ -180,38 +180,6 @@ describe "ユーザー管理機能", type: :system do
 
         expect(user_admin.text).to eq("あり")
       end
-
-      context "他に管理者がいる場合" do
-        let!(:user_to_edit) { FactoryBot.create(:user, admin: true) }
-
-        it "管理権限を消せる" do
-          login_by(user_to_edit)
-          visit(edit_admin_user_path(user_to_edit))
-          checked = find(class: /input-admin/).checked?
-
-          expect(checked).to eq(true) # あり
-
-          uncheck(class: /input-admin/)
-          click_button(I18n.t("helpers.submit.update"))
-
-          expect(page).to have_current_path(root_path)
-          expect(page).not_to have_link(admin_users_path)
-        end
-      end
-
-      context "他に管理者がいない場合" do
-        it "管理者権限を持つものがいなくなる編集を行えない" do
-          visit(edit_admin_user_path(user))
-          uncheck(class: /input-admin/)
-          click_button(I18n.t("helpers.submit.update"))
-
-          within("#error_explanation") do
-            expect(page).to have_content("管理者権限をもつユーザーは一人以上存在しなければなりません")
-          end
-
-          expect(user.admin).to eq(true)
-        end
-      end
     end
 
     describe "削除機能" do
