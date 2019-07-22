@@ -17,6 +17,7 @@ ja:
     models:
       task: タスク
       user: ユーザー
+      label: ラベル
     attributes:
       task:
         id: ID
@@ -32,6 +33,8 @@ ja:
         password: パスワード
         password_confirmation: パスワード(確認)
         admin: 管理者権限
+      label:
+        name: ラベル名
   admin:
     users:
       index:
@@ -74,6 +77,9 @@ ja:
         success: 登録に成功しました
     edit:
       header: ユーザー情報編集
+  labels:
+    index:
+      header: ラベル一覧
   sessions:
     new:
       header: ログイン
