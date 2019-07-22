@@ -7,11 +7,15 @@
   %thead.thead-default
     %tr
       %th= Label.human_attribute_name(:name)
+      %th= Label.human_attribute_name(:created_at)
+      %th= Label.human_attribute_name(:updated_at)
       %th
     %tbody
       - @labels.each do |label|
         %tr
           %td= link_to(label.name, label, id: "label-name-#{label.id}")
+          %td= label.created_at
+          %td= label.updated_at
           %td
             -# = link_to(t('helpers.edit.button'), edit_task_path(label), class: 'btn btn-primary mr-3')
             -# = link_to(t('helpers.delete.button'), label, method: :delete,
