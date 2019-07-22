@@ -194,7 +194,7 @@ describe "ユーザー管理機能", type: :system do
           uncheck(class: /input-admin/)
           click_button(I18n.t("helpers.submit.update"))
 
-          expect(page).to have_current_path(tasks_path)
+          expect(page).to have_current_path(root_path)
           expect(page).not_to have_link(admin_users_path)
         end
       end
