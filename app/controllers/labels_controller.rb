@@ -29,6 +29,12 @@ class LabelsController < ApplicationController
     end
   end
 
+  def destroy
+    @label = current_user.labels.find(params[:id])
+    @label.destroy!
+    redirect_to(labels_path, notice: t(".notice", name: @label.name))
+  end
+
   private
 
     def label_params

@@ -50,4 +50,20 @@ describe "ラベル機能", type: :system do
       expect(labels).to include("適当なラベル名")
     end
   end
+
+  describe "ラベル削除" do
+    it "アプリからラベルの削除ができる" do
+      label = FactoryBot.create(:label, user: user)
+      visit(labels_path)
+
+      labels = all(id: /\Alabel-name-(?:\d+)\z/).collect(&:text)
+      expect(labels).to include(label.name)
+
+      click_on(I18n.t("helpers.delete.button"))
+      page.driver.browser.switch_to.alert.accept
+
+      labels = all(id: /\Alabel-name-(?:\d+)\z/).collect(&:text)
+      expect(labels).not_to include(label.name)
+    end
+  end
 end

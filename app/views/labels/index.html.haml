@@ -18,5 +18,5 @@
           %td= label.updated_at
           %td
             = link_to(t('helpers.edit.button'), edit_label_path(label), class: 'btn btn-primary mr-3')
-            -# = link_to(t('helpers.delete.button'), label, method: :delete,
-            -#   data: { confirm: t('helpers.delete.confirm', name: label.name) } ,class: 'btn btn-danger')
+            = link_to(t('helpers.delete.button'), label, method: :delete,
+              data: { confirm: t('.delete.confirm', name: label.name) } ,class: 'btn btn-danger')

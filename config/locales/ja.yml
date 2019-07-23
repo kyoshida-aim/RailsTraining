@@ -80,6 +80,8 @@ ja:
   labels:
     index:
       header: ラベル一覧
+      delete:
+        confirm: "ラベル「%{name}」を削除します。よろしいですか？"
     new:
       header: 新規ラベル作成
     create:
@@ -88,6 +90,8 @@ ja:
       header: ラベル編集
     update:
       notice: "ラベルを更新しました:更新後->「%{name}」"
+    destroy:
+      notice: "ラベル「%{name}」を削除しました"
   sessions:
     new:
       header: ログイン
