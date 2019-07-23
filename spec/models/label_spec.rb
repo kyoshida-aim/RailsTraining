@@ -20,5 +20,14 @@ describe Label, type: :model do
       label.name = Faker::String.random(17)
       expect(label.valid?).to eq(false)
     end
+
+    it "名前の前後の空白はバリデーション時に削除される" do
+      label = FactoryBot.create(:label)
+      expect(label.valid?).to eq(true)
+
+      label.name = " " + Faker::String.random(1..16) + " "
+      expect(label.valid?).to eq(true)
+      expect(label.name.strip).to eq(label.name)
+    end
   end
 end
