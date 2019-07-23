@@ -1,6 +1,22 @@
 require "rails_helper"
 
 describe "ユーザー管理機能", type: :system do
+  context "管理権限を持たない場合" do
+    let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: false) }
+
+    it "管理ページへのリンクが表示されない" do
+      login_by(user)
+
+      expect(page).not_to have_link(href: admin_users_path)
+    end
+
+    it "管理ページへのアクセスできない" do
+      login_by(user)
+      visit(admin_users_path)
+      expect(page).to have_content("The page you were looking for doesn't exist.")
+    end
+  end
+
   describe "ユーザー一覧画面" do
     let!(:user) { FactoryBot.create(:user, login_id: "UserA", admin: true) }
 
@@ -136,7 +152,7 @@ describe "ユーザー管理機能", type: :system do
       end
     end
 
-    describe "ユーザー編集" do
+    describe "管理権限の編集" do
       it "管理者権限の有無のみが編集できる" do
         visit(admin_users_path)
         click_link(href: edit_admin_user_path(user))
@@ -163,20 +179,6 @@ describe "ユーザー管理機能", type: :system do
         user_admin = find_by_id(/\Auser-id-#{user.id}-admin\z/) # rubocop:disable Rails/DynamicFindBy
 
         expect(user_admin.text).to eq("あり")
-      end
-    end
-
-    describe "削除機能" do
-      context "削除ボタンを押した時" do
-        it "削除できる" do
-          visit(admin_users_path)
-          click_on(I18n.t("helpers.delete.button"), class: "btn btn-danger user-id-#{user.id}")
-          page.driver.browser.switch_to.alert.accept
-          users = all(id: /\Auser-id-(?:\d+)\z/).collect(&:text)
-
-          expect(page).to have_selector(".alert-success", text: "ユーザー「#{user.login_id}」を削除しました")
-          expect(users).not_to include(user.login_id)
-        end
       end
     end
   end
