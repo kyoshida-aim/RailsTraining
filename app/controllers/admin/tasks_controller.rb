@@ -1,4 +1,4 @@
-class Admin::TasksController < ApplicationController
+class Admin::TasksController < AdminController
   def index
     @user = User.find(params[:user_id])
     # ransackにより受け渡されるパラメータ:qによってソート

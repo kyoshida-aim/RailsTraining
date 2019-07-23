@@ -61,6 +61,7 @@ ja:
       destroy:
         destroy:
           success: "ユーザー「%{user}」を削除しました"
+          failed: ユーザーの削除に失敗しました
     tasks:
       index:
         header: "%{user}のタスク一覧"
@@ -220,6 +221,7 @@ ja:
       too_long: は%{count}文字以内で入力してください
       too_short: は%{count}文字以上で入力してください
       wrong_length: は%{count}文字で入力してください
+      need_admin: をもつユーザーは一人以上存在しなければなりません
     template:
       body: 次の項目を確認してください
       header:
