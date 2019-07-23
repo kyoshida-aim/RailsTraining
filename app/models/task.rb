@@ -6,6 +6,8 @@ class Task < ApplicationRecord
   validate :validate_deadline_minimum_value
 
   belongs_to :user
+  has_many :label_maps, dependent: :delete_all
+  has_many :labels, through: :label_maps
 
   def self.ransackable_attributes(auth_object = nil)
     %w[name status deadline priority]
