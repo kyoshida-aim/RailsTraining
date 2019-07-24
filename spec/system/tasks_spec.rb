@@ -193,6 +193,21 @@ describe "タスク管理機能", type: :system do
         expect(page).to have_content("検証用のタスク")
       end
     end
+
+    context "ラベルが設定されている場合" do
+      let!(:label) { FactoryBot.create(:label, user: user_a) }
+
+      before do
+        task.labels = [label]
+        visit(task_path(task))
+      end
+
+      it "ラベルが表示される" do
+        labels = all(class: /\Abadge badge-pill badge-info\z/).collect(&:text)
+
+        expect(labels).to match_array([label.name])
+      end
+    end
   end
 
   describe "新規登録機能" do
