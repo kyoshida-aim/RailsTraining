@@ -3,37 +3,7 @@
 .nav.justify-content-end
   = link_to(t('helpers.list'), tasks_path, class: 'nav-link')
 
-%table.table.table-hover
-  %tbody
-    %tr
-      %th= Task.human_attribute_name(:id)
-      %td= @task.id
-    %tr
-      %th= Task.human_attribute_name(:name)
-      %td= @task.name
-    %tr
-      %th= Task.human_attribute_name(:description)
-      %td= simple_format(h(@task.description), {}, sanitize: false, wrapper_tag: 'div')
-    %tr
-      %th= Task.human_attribute_name(:created_at)
-      %td= @task.created_at
-    %tr
-      %th= Task.human_attribute_name(:updated_at)
-      %td= @task.updated_at
-    %tr
-      %th= Task.human_attribute_name(:deadline)
-      %td= @task.deadline
-    %tr
-      %th= Task.human_attribute_name(:status)
-      %td= @task.status_i18n
-    %tr
-      %th= Task.human_attribute_name(:priority)
-      %td= @task.priority_i18n
-    %tr
-      %th= Label.model_name.human
-      %td
-        - @task.labels.each_with_index do |label, i|
-          .badge.badge-pill.badge-info= label.name
+= render(partial: 'shared/task_detail', locals: { task: @task } )
 
 = link_to(t('helpers.edit.button'), edit_task_path, class: 'btn btn-primary mr-3')
 = link_to(t('helpers.delete.button'), @task, method: :delete,
