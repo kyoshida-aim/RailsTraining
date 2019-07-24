@@ -348,6 +348,25 @@ describe "タスク管理機能", type: :system do
         end
       end
     end
+
+    describe "ラベル" do
+      let!(:task) {  FactoryBot.create(:task,  user: user_a) }
+      let!(:label) { FactoryBot.create(:label, user: user_a) }
+
+      it "ラベルが編集できる" do
+        expect(task.labels).to match_array([])
+
+        visit(edit_task_path(task))
+
+        checkbox = find(class: /label_id-#{label.id}/)
+        expect(checkbox.checked?).to eq(false)
+
+        checkbox.check
+        click_button(I18n.t("helpers.submit.update"))
+
+        expect(find(class: /badge badge-pill badge-info/).text).to eq(label.name)
+      end
+    end
   end
 
   describe "削除機能" do
