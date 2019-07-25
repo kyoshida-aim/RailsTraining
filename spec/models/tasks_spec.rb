@@ -47,15 +47,30 @@ describe Task, type: :model do
   end
 
   describe "ラベル数のバリデーション" do
+    let!(:user) { FactoryBot.create(:user) }
+
     it "一個のタスクに設定できるラベルは10個まで" do
-      task = FactoryBot.create(:task)
-      labels = FactoryBot.create_list(:label, 11)
+      labels = FactoryBot.create_list(:label, 11, user: user)
+      task = FactoryBot.create(:task, user: user)
 
       task.labels = labels[0..9]
       expect(task.valid?).to eq(true)
 
       task.labels = labels[0..10]
       expect(task.valid?).to eq(false)
+    end
+  end
+
+  describe "他ユーザーのラベル" do
+    let!(:user_a) { FactoryBot.create(:user) }
+    let!(:user_b) { FactoryBot.create(:user) }
+    let!(:label) { FactoryBot.create(:label, user: user_b) }
+
+    it "他ユーザーのラベルをタスクに設定することはできない" do
+      task = FactoryBot.create(:task, user: user_a)
+
+      task.labels.append(label)
+      expect { task.save! }.to raise_error(Task::InvalidLabelIdGiven)
     end
   end
 end
