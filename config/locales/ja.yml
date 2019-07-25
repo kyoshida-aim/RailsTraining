@@ -12,6 +12,8 @@ ja:
           attributes:
             deadline:
               after: は現在時刻以降に設定してください
+            labels:
+              too_many: "の数は%{count}個以下に設定してください"
         user:
           only_alphameric: には英数字のみ使用できます
     models:
@@ -28,6 +30,7 @@ ja:
         deadline: 終了期限
         status: ステータス
         priority: 優先度
+        labels: ラベル
       user:
         login_id: ログインID
         password: パスワード

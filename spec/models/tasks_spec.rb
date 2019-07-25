@@ -29,4 +29,17 @@ describe Task, type: :model do
       expect(Task.ransackable_attributes).to include(:status.to_s)
     end
   end
+
+  describe "ラベル数のバリデーション" do
+    it "一個のタスクに設定できるラベルは10個まで" do
+      task = FactoryBot.create(:task)
+      labels = FactoryBot.create_list(:label, 11)
+
+      task.labels = labels[0..9]
+      expect(task.valid?).to eq(true)
+
+      task.labels = labels[0..10]
+      expect(task.valid?).to eq(false)
+    end
+  end
 end

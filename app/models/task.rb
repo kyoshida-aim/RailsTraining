@@ -4,6 +4,7 @@ class Task < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 30 }
   validate :validate_deadline_minimum_value
+  validate :validate_number_of_labels_in_one_task
 
   belongs_to :user
   has_many :label_maps, dependent: :delete_all
@@ -21,5 +22,9 @@ class Task < ApplicationRecord
 
     def validate_deadline_minimum_value
       errors.add(:deadline, :after) if !deadline.nil? && deadline < Time.zone.now
+    end
+
+    def validate_number_of_labels_in_one_task
+      errors.add(:labels, :too_many, count: 10) if labels.size > 10
     end
 end
