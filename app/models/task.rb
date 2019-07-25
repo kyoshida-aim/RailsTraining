@@ -7,8 +7,8 @@ class Task < ApplicationRecord
   validate :validate_number_of_labels_in_one_task
 
   belongs_to :user
-  has_many :label_maps, dependent: :delete_all
-  has_many :labels, through: :label_maps
+  has_many :labels_tasks, dependent: :delete_all
+  has_many :labels, through: :labels_tasks
 
   def self.ransackable_attributes(auth_object = nil)
     %w[name status deadline priority]

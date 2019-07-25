@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :label_map do
+  factory :labels_tasks do
     label
     task
   end
