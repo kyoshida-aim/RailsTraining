@@ -175,6 +175,17 @@ describe "タスク管理機能", type: :system do
         expect(page).to have_current_path(/\?page=/)
       end
     end
+
+    describe "ラベル" do
+      it "ラベルが表示される" do
+        label = FactoryBot.create(:label, name: "ラベル", user: user_a)
+        task = FactoryBot.create(:task, name: "ラベル付きのタスク", user: user_a, labels: [label])
+        visit(tasks_path)
+
+        tasks = all(id: "task-name-#{task.id}").collect(&:text)
+        expect(tasks).to include(task.name)
+      end
+    end
   end
 
   describe "詳細表示機能" do

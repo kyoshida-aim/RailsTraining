@@ -19,22 +19,24 @@
   = paginate @tasks
   = page_entries_info @tasks
 %table.table.table-hover
-  %thead.thead-default
+  %thead.thead-light
     %tr
       %th= Task.human_attribute_name(:name)
-      %th= Task.human_attribute_name(:created_at)
       %th= sort_link(@q, :deadline, default_order: :asc)
       %th= Task.human_attribute_name(:status)
       %th= sort_link(@q, :priority, default_order: :desc)
+      %th.col-task-label= Label.model_name.human
       %th
     %tbody
       - @tasks.each do |task|
         %tr
           %td= link_to(task.name, task, id: "task-name-#{task.id}")
-          %td= task.created_at
           %td= task.deadline
           %td= task.status_i18n
           %td= task.priority_i18n
+          %td
+            - task.labels.each do |label|
+              .badge.badge-pill.badge-info= label.name
           %td
             = link_to(t('helpers.edit.button'), edit_task_path(task), class: 'btn btn-primary mr-3')
             = link_to(t('helpers.delete.button'), task, method: :delete,
