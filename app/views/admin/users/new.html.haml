@@ -1,9 +1,6 @@
 %h1=t(".header")
 
-- if @user.errors.present?
-  %ul#error_explanation
-    - @user.errors.full_messages.each do |message|
-      %li= message
+= render(partial: 'errors', locals: { user: @user } )
 
 = form_with(model: [:admin, @user], local: true) do |f|
   .form-group
@@ -19,4 +16,4 @@
   .form-group
     = f.label(:password_confirmation, User.human_attribute_name(:password_confirmation))
     = f.password_field(:password_confirmation, class: 'form-control input-password_confirmation')
-  = f.submit(t("helpers.submit.create"), class: "btn btn-primary")
+  = f.submit(nil, class: "btn btn-primary")
