@@ -27,5 +27,5 @@
     %tr
       %th= Label.model_name.human
       %td
-        - task.labels.each_with_index do |label, i|
+        - task.labels.each do |label|
           .badge.badge-pill.badge-info= label.name
