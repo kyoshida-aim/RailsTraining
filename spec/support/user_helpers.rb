@@ -28,3 +28,7 @@ module UserHelpers
       fill_in(with: password_confirmation, class: /\Aform-control input-password_confirmation\z/)
     end
 end
+
+RSpec.configure do |config|
+  config.include UserHelpers, type: :system
+end
