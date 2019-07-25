@@ -4,6 +4,11 @@ describe Task, type: :model do
   describe "名前のバリデーション" do
     let(:task) { FactoryBot.create(:task) }
 
+    it "日本語名が使用できる" do
+      task.name = "日米kouryuu"
+      expect(task.valid?).to eq(true)
+    end
+
     context "30文字以上の場合に" do
       it "バリデーションエラーが発生する" do
         task.name = Faker::String.random(29)
