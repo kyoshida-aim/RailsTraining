@@ -30,4 +30,17 @@ describe Label, type: :model do
       expect(label.name.strip).to eq(label.name)
     end
   end
+
+  describe "登録数の制限" do
+    it "一人のユーザーが持てるラベルの数は20まで" do
+      user = FactoryBot.create(:user)
+      user.labels = FactoryBot.create_list(:label, 20, user: user)
+
+      new_label_a = user.labels.create(name: "適当な名前")
+      expect(new_label_a.persisted?).to eq(true)
+
+      new_label_b = user.labels.create(name: "適当な名前")
+      expect(new_label_b.persisted?).to eq(false)
+    end
+  end
 end

@@ -14,6 +14,10 @@ ja:
               after: は現在時刻以降に設定してください
         user:
           only_alphameric: には英数字のみ使用できます
+        label:
+          attributes:
+            base:
+              too_many: "ラベルはユーザー毎に%{count}個までしか登録できません"
     models:
       task: タスク
       user: ユーザー
