@@ -17,7 +17,7 @@ describe Label, type: :model do
       label = FactoryBot.create(:label)
       expect(label.valid?).to eq(true)
 
-      label.name = Faker::Alphanumeric.alphanumeric(Label::NAME_SIZE_MAX + 1)
+      label.name = Faker::Alphanumeric.alphanumeric(Label::NAME_LENGTH_MAX + 1)
       expect(label.valid?).to eq(false)
     end
 
@@ -25,7 +25,7 @@ describe Label, type: :model do
       label = FactoryBot.create(:label)
       expect(label.valid?).to eq(true)
 
-      label.name = " " + Faker::Alphanumeric.alphanumeric(Label::NAME_SIZE_MAX) + " "
+      label.name = " " + Faker::Alphanumeric.alphanumeric(Label::NAME_LENGTH_MAX) + " "
       expect(label.valid?).to eq(true)
       expect(label.name.strip).to eq(label.name)
     end

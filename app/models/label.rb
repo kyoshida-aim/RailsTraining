@@ -1,8 +1,8 @@
 class Label < ApplicationRecord
-  NAME_SIZE_MAX = 16
+  NAME_LENGTH_MAX = 16
 
   belongs_to :user
-  validates :name, presence: true, length: { maximum: NAME_SIZE_MAX }
+  validates :name, presence: true, length: { maximum: NAME_LENGTH_MAX }
 
   before_validation :strip_whitespaces
   validate :labels_user_can_have, on: [:create]
