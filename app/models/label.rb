@@ -7,11 +7,11 @@ class Label < ApplicationRecord
   before_validation :strip_whitespaces
   validate :labels_user_can_have, on: [:create]
 
-  def strip_whitespaces
-    name.strip!
-  end
-
   private
+
+    def strip_whitespaces
+      name.strip!
+    end
 
     def labels_user_can_have
       errors.add(:base, :too_many, count: 20) if user.labels.size > 20
