@@ -3,7 +3,7 @@ class Admin::TasksController < AdminController
     @user = User.find(params[:user_id])
     # ransackにより受け渡されるパラメータ:qによってソート
     @q = @user.tasks.order(created_at: :desc).ransack(params[:q])
-    @tasks = @q.result.page(params[:page])
+    @tasks = @q.result(distinct: true).includes(:labels).page(params[:page])
   end
 
   def show

@@ -10,6 +10,11 @@
     .col-2
       - keys = Task.statuses.transform_keys{ |k| Task.statuses_i18n[k] }
       = f.select :status_eq, keys, { include_blank: true }, class: 'form-control', id: :search_by_status
+  .form-group.row
+    = f.label :labels_name_in, Label.model_name.human, class: 'col-sm-2 col-form-label'
+    .col
+      = f.collection_check_boxes(:labels_name_in, current_user.labels, :name, :name) do |b|
+        = b.label(class: "badge badge-pill badge-info search-form label_id-#{b.object.id}") { b.check_box + b.text }
   .form-group
     = f.submit t('helpers.submit.search'),class: 'btn btn-outline-primary'
 
