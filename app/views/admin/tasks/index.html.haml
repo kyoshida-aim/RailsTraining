@@ -1,6 +1,6 @@
 %h1= t(".header", user: @user.login_id)
 
-= search_form_for @q, class: 'mb-5' do |f|
+= search_form_for @q, class: 'mb-5', url: admin_user_tasks_path(@user.id) do |f|
   .form-group.row
     = f.label :name_cont, Task.human_attribute_name(:name), class: 'col-sm-2 col-form-label'
     .col
