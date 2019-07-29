@@ -45,7 +45,7 @@ describe User, type: :model do
       expect(admin_user.valid?).to eq(true)
       expect(User.where(admin: true).size).to eq(1)
 
-      expect { admin_user.destroy }.to raise_error(Exceptions::UnableToDestroyLastAdmin)
+      expect { admin_user.destroy }.to raise_error(User::UnableToDestroyLastAdmin)
     end
   end
 end

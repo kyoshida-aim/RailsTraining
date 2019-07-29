@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  class UnableToDestroyLastAdmin < StandardError; end
+
   has_secure_password
   has_many :tasks, dependent: :delete_all
   has_many :labels, dependent: :delete_all
@@ -19,6 +21,6 @@ class User < ApplicationRecord
     end
 
     def enable_destroy?
-      raise Exceptions::UnableToDestroyLastAdmin if User.where(admin: true).size == 1 && self.admin?
+      raise(UnableToDestroyLastAdmin, "Unable to destroy admin user because no other admin user exists") if User.where(admin: true).size == 1 && self.admin?
     end
 end
