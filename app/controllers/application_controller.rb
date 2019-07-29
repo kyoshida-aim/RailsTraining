@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  rescue_from StandardError, with: :render_500
+
   helper_method :current_user
   before_action :login_required
 
@@ -18,7 +20,7 @@ class ApplicationController < ActionController::Base
     end
 
     def render_500(e = nil)
-      logger.error e.inspect if e
+      logger.error e.full_message if e
       render(file: Rails.root.join("public/500.html"), status: 500, layout: false)
     end
 end
