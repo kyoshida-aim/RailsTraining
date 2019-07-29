@@ -1,5 +1,5 @@
 class Admin::UsersController < AdminController
-  rescue_from Exceptions::UnableToDestroyLastAdmin, with: :unable_to_destroy
+  rescue_from User::UnableToDestroyLastAdmin, with: :unable_to_destroy
 
   def index
     @users = User.all.includes(:tasks)
