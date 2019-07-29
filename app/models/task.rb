@@ -34,7 +34,7 @@ class Task < ApplicationRecord
 
     def check_label_owner
       invalid_labels = labels - user.labels
-      unless invalid_labels.empty?
+      if invalid_labels.present?
         invalid_ids = invalid_labels.collect(&:id)
         messages = "Params contain Label that user does not own.ids:#{invalid_ids}"
         raise InvalidLabelIdGiven, messages
