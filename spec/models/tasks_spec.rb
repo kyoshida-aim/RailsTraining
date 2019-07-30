@@ -50,8 +50,8 @@ describe Task, type: :model do
     let!(:user) { FactoryBot.create(:user) }
 
     it "一個のタスクに設定できるラベルは10個まで" do
-      labels = FactoryBot.create_list(:label, 11, user: user)
-      task = FactoryBot.create(:task, user: user)
+      labels = FactoryBot.create_list(:label, 11, user_id: user.id)
+      task = FactoryBot.create(:task, user_id: user.id)
 
       task.labels = labels[0..9]
       expect(task.valid?).to eq(true)
