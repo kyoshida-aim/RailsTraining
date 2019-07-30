@@ -1,12 +1,21 @@
 class Label < ApplicationRecord
+  NAME_LENGTH_MAX = 16
+
   belongs_to :user
   has_many :labels_tasks, dependent: :delete_all
   has_many :tasks, through: :labels_tasks
-  validates :name, presence: true, length: { maximum: 16 }
+  validates :name, presence: true, length: { maximum: NAME_LENGTH_MAX }
 
-  before_validation :remove_whitespaces
+  before_validation :strip_whitespaces
+  validate :labels_user_can_have, on: [:create]
 
-  def remove_whitespaces
-    name.strip!
-  end
+  private
+
+    def strip_whitespaces
+      name.strip!
+    end
+
+    def labels_user_can_have
+      errors.add(:base, :too_many, count: 20) if user.labels.size > 20
+    end
 end

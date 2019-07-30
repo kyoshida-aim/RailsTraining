@@ -15,3 +15,7 @@ module LabelHelpers
       fill_in(with: name, class: /\Aform-control input-name\z/)
     end
 end
+
+RSpec.configure do |config|
+  config.include LabelHelpers, type: :system
+end
