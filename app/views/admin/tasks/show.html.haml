@@ -29,3 +29,8 @@
     %tr
       %th= Task.human_attribute_name(:priority)
       %td= @task.priority_i18n
+    %tr
+      %th= Label.model_name.human
+      %td
+        - @task.labels.each do |label|
+          .badge.badge-pill.badge-info= label.name

@@ -29,6 +29,11 @@
     %tr
       %th= Task.human_attribute_name(:priority)
       %td= @task.priority_i18n
+    %tr
+      %th= Label.model_name.human
+      %td
+        - @task.labels.each do |label|
+          .badge.badge-pill.badge-info= label.name
 
 = link_to(t('helpers.edit.button'), edit_task_path, class: 'btn btn-primary mr-3')
 = link_to(t('helpers.delete.button'), @task, method: :delete,

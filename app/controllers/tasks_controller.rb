@@ -11,14 +11,17 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
+    @labels = current_user.labels
   end
 
   def edit
     @task = current_user.tasks.find(params[:id])
+    @labels = current_user.labels
   end
 
   def update
     @task = current_user.tasks.find(params[:id])
+    @labels = current_user.labels
     if @task.update(task_params)
       redirect_to(task_url, notice: t("helpers.edit.notice", name: @task.name))
     else
@@ -34,6 +37,7 @@ class TasksController < ApplicationController
 
   def create
     @task = current_user.tasks.new(task_params)
+    @labels = current_user.labels
     if @task.save
       redirect_to(@task, notice: t("helpers.create.notice", name: @task.name))
     else
@@ -44,6 +48,6 @@ class TasksController < ApplicationController
   private
 
     def task_params
-      params.require(:task).permit(:name, :description, :deadline, :status, :priority)
+      params.require(:task).permit(:name, :description, :deadline, :status, :priority, label_ids: [])
     end
 end

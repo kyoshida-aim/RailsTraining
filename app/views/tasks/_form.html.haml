@@ -20,4 +20,10 @@
   .form-group
     = f.label :priority
     = f.select :priority, Task.priorities_i18n.invert, {}, { class: 'form-control col-sm-2' }
+  .form-group
+    = f.label Label.model_name.human
+    %br
+    = f.collection_check_boxes(:label_ids, labels, :id, :name) do |b|
+      - checked = task.label_ids.include?(b.value) ? "checked" : ""
+      = b.label(class: "badge badge-pill badge-info label_id-#{b.value}") { b.check_box(checked: checked) + b.text }
   = f.submit nil, class: 'btn btn-primary'

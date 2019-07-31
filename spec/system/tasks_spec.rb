@@ -193,6 +193,21 @@ describe "タスク管理機能", type: :system do
         expect(page).to have_content("検証用のタスク")
       end
     end
+
+    context "ラベルが設定されている場合" do
+      let!(:label) { FactoryBot.create(:label, user: user_a) }
+
+      before do
+        task.labels = [label]
+        visit(task_path(task))
+      end
+
+      it "ラベルが表示される" do
+        labels = all(class: /\Abadge badge-pill badge-info\z/).collect(&:text)
+
+        expect(labels).to match_array([label.name])
+      end
+    end
   end
 
   describe "新規登録機能" do
@@ -331,6 +346,25 @@ describe "タスク管理機能", type: :system do
         it "新規登録できる" do
           expect(page).to have_selector(".alert-success", text: task.name)
         end
+      end
+    end
+
+    describe "ラベル" do
+      let!(:task) {  FactoryBot.create(:task,  user: user_a) }
+      let!(:label) { FactoryBot.create(:label, user: user_a) }
+
+      it "ラベルが編集できる" do
+        expect(task.labels).to match_array([])
+
+        visit(edit_task_path(task))
+
+        checkbox = find(class: /label_id-#{label.id}/)
+        expect(checkbox.checked?).to eq(false)
+
+        checkbox.check
+        click_button(I18n.t("helpers.submit.update"))
+
+        expect(find(class: /badge badge-pill badge-info/).text).to eq(label.name)
       end
     end
   end

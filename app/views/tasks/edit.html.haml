@@ -3,4 +3,4 @@
 .nav.justify-content-end
   = link_to(t('helpers.list'), tasks_path, class: 'nav-link')
 
-= render(partial: 'form', locals: { task: @task } )
+= render(partial: 'form', locals: { task: @task, labels: @labels } )
