@@ -4,7 +4,7 @@ class Task < ApplicationRecord
   enum status: { not_started: 0, in_progress: 1, finished: 2 }
   enum priority: { low: 0, middle: 1, high: 2 }
 
-  before_validation :check_label_owner
+  before_validation :validate_label_owner
 
   validates :name, presence: true, length: { maximum: 30 }
   validate :validate_deadline_minimum_value
@@ -32,7 +32,7 @@ class Task < ApplicationRecord
       errors.add(:labels, :too_many, count: 10) if labels.size > 10
     end
 
-    def check_label_owner
+    def validate_label_owner
       invalid_labels = labels - user.labels
       if invalid_labels.present?
         invalid_ids = invalid_labels.collect(&:id)
