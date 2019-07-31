@@ -108,7 +108,7 @@ describe "タスク管理機能", type: :system do
       end
     end
 
-    describe "検索" do
+    describe "名称とステータスでの検索" do
       before do
         FactoryBot.create(:task, user: user_a, name: "タスク", status: :in_progress)
         FactoryBot.create(:task, user: user_a, name: "タスクB", status: :finished)
@@ -158,6 +158,28 @@ describe "タスク管理機能", type: :system do
       end
     end
 
+    describe "ラベルでの検索" do
+      let!(:task) { FactoryBot.create_list(:task, 3, user: user_a) }
+      let!(:label) { FactoryBot.create_list(:label, 3, user: user_a) }
+
+      before do
+        task[0].labels = [label[0], label[2]]
+        task[1].labels = [label[1]]
+        task[2].labels = [label[2]]
+      end
+
+      it "指定したラベルをもつタスクのみが表示される" do
+        visit(tasks_path)
+        find(class: /search-form label_id-#{label[2].id}/).check
+        click_on(I18n.t("helpers.submit.search"))
+        tasks = all(id: /\Atask-name-(\d+)\z/).collect(&:text)
+
+        expect(tasks).to include(task[0].name)
+        expect(tasks).not_to include(task[1].name)
+        expect(tasks).to include(task[2].name)
+      end
+    end
+
     describe "ページネーション" do
       before do
         FactoryBot.create_list(:task, 51, user: user_a)
@@ -173,6 +195,17 @@ describe "タスク管理機能", type: :system do
       it "ページ移動ができる" do
         click_link(id: "page-next")
         expect(page).to have_current_path(/\?page=/)
+      end
+    end
+
+    describe "ラベル" do
+      it "ラベルが表示される" do
+        label = FactoryBot.create(:label, name: "ラベル", user: user_a)
+        task = FactoryBot.create(:task, name: "ラベル付きのタスク", user: user_a, labels: [label])
+        visit(tasks_path)
+
+        tasks = all(id: "task-name-#{task.id}").collect(&:text)
+        expect(tasks).to include(task.name)
       end
     end
   end

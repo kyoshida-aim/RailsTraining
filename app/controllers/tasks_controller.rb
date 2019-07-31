@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   def index
     # ransackにより受け渡されるパラメータ:qによってソート
     @q = current_user.tasks.order(created_at: :desc).ransack(params[:q])
-    @tasks = @q.result.page(params[:page])
+    @tasks = @q.result(distinct: true).includes(:labels).page(params[:page])
   end
 
   def show

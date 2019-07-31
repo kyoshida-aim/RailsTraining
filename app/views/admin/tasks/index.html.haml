@@ -1,6 +1,6 @@
 %h1= t(".header", user: @user.login_id)
 
-= search_form_for @q, class: 'mb-5' do |f|
+= search_form_for @q, class: 'mb-5', url: admin_user_tasks_path(@user.id) do |f|
   .form-group.row
     = f.label :name_cont, Task.human_attribute_name(:name), class: 'col-sm-2 col-form-label'
     .col
@@ -10,8 +10,13 @@
     .col-2
       - keys = Task.statuses.transform_keys{ |k| Task.statuses_i18n[k] }
       = f.select :status_eq, keys, { include_blank: true }, class: 'form-control', id: :search_by_status
+  .form-group.row
+    = f.label :labels_name_in, Label.model_name.human, class: 'col-sm-2 col-form-label'
+    .col
+      = f.collection_check_boxes(:labels_name_in, current_user.labels, :name, :name) do |b|
+        = b.label(class: "badge badge-pill badge-info search-form label_id-#{b.object.id}") { b.check_box + b.text }
   .form-group
-    = f.submit t('helpers.submit.search'),class: 'btn btn-outline-primary'
+    = f.submit t('helpers.submit.search'), class: 'btn btn-outline-primary'
 
 .mb-3
   = paginate @tasks
@@ -20,15 +25,17 @@
   %thead.thead-default
     %tr
       %th= Task.human_attribute_name(:name)
-      %th= Task.human_attribute_name(:created_at)
       %th= sort_link(@q, :deadline, default_order: :asc)
       %th= Task.human_attribute_name(:status)
       %th= sort_link(@q, :priority, default_order: :desc)
+      %th.col-task-label= Label.model_name.human
     %tbody
       - @tasks.each do |task|
         %tr
           %td= link_to(task.name, admin_user_task_path(@user.id, task.id), id: "task-name-#{task.id}")
-          %td= task.created_at
           %td= task.deadline
           %td= task.status_i18n
           %td= task.priority_i18n
+          %td
+            - task.labels.each do |label|
+              .badge.badge-pill.badge-info= label.name

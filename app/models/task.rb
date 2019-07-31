@@ -15,11 +15,11 @@ class Task < ApplicationRecord
   has_many :labels, through: :labels_tasks
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[name status deadline priority]
+    %w[name status deadline priority labels]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    []
+    %w[labels labels_tasks]
   end
 
   private
