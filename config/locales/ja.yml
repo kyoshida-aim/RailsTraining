@@ -14,9 +14,14 @@ ja:
               after: は現在時刻以降に設定してください
         user:
           only_alphameric: には英数字のみ使用できます
+        label:
+          attributes:
+            base:
+              too_many: "ラベルはユーザー毎に%{count}個までしか登録できません"
     models:
       task: タスク
       user: ユーザー
+      label: ラベル
     attributes:
       task:
         id: ID
@@ -32,6 +37,8 @@ ja:
         password: パスワード
         password_confirmation: パスワード(確認)
         admin: 管理者権限
+      label:
+        name: ラベル名
   admin:
     users:
       index:
@@ -75,6 +82,21 @@ ja:
         success: 登録に成功しました
     edit:
       header: ユーザー情報編集
+  labels:
+    index:
+      header: ラベル一覧
+      delete:
+        confirm: "ラベル「%{name}」を削除します。よろしいですか？"
+    new:
+      header: 新規ラベル作成
+    create:
+      notice: "ラベル「%{name}」を作成しました"
+    edit:
+      header: ラベル編集
+    update:
+      notice: "ラベルを更新しました:更新後->「%{name}」"
+    destroy:
+      notice: "ラベル「%{name}」を削除しました"
   sessions:
     new:
       header: ログイン

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :tasks, dependent: :delete_all
+  has_many :labels, dependent: :delete_all
 
   validate :need_admin, on: :update
   before_destroy :enable_destroy?
